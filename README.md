@@ -264,7 +264,9 @@ docker compose down -v
 
 ## 7. Cloud Deployment on Render (render.com)
 
-VETTA is pre-configured for automated 1-click deployment on [Render](https://render.com) using the included Infrastructure-as-Code `render.yaml` blueprint.
+VETTA is deployed live in production on Render:
+* **Production URL:** [https://vetta-9xaz.onrender.com](https://vetta-9xaz.onrender.com)
+* **Detailed Deployment Guide:** See [DEPLOYMENT.md](DEPLOYMENT.md) for full cloud architecture, health probes, Docker configurations, and Kubernetes manifests.
 
 ### Option A: Render Blueprint (Infrastructure-as-Code)
 1. Push your repository to GitHub or GitLab.
@@ -272,7 +274,7 @@ VETTA is pre-configured for automated 1-click deployment on [Render](https://ren
 3. Select your VETTA repository. Render will automatically detect `render.yaml` and configure the Python web service.
 4. Set the secret environment variable:
    * `GOOGLE_API_KEY`: Your Google Gemini API key.
-5. Click **Apply**. Render will automatically build, test dependencies, and deploy the service with an auto-provisioned SSL certificate (`https://vetta-xxxx.onrender.com`).
+5. Click **Apply**. Render will automatically build, test dependencies, and deploy the service with an auto-provisioned SSL certificate (`https://vetta-9xaz.onrender.com`).
 
 ### Option B: Manual Web Service Setup on Render
 * **Runtime**: `Python`

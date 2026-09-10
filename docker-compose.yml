@@ -1,0 +1,121 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vetta-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=postgresql+asyncpg://vetta_user:vetta_secret@postgres:5432/vetta_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      - USE_CELERY=true
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - LLM_MODEL=${LLM_MODEL:-gemini-2.5-flash}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-test}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-test}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_S3_BUCKET=${AWS_S3_BUCKET:-vetta-interview-artifacts}
+      - AWS_S3_ENDPOINT_URL=http://localstack:4566
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      localstack:
+        condition: service_started
+    networks:
+      - vetta-net
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vetta-worker
+    restart: unless-stopped
+    command: ["celery", "-A", "app.tasks.worker.celery_app", "worker", "--loglevel=info", "--concurrency=2"]
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=postgresql+asyncpg://vetta_user:vetta_secret@postgres:5432/vetta_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      - USE_CELERY=true
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - LLM_MODEL=${LLM_MODEL:-gemini-2.5-flash}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-test}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-test}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_S3_BUCKET=${AWS_S3_BUCKET:-vetta-interview-artifacts}
+      - AWS_S3_ENDPOINT_URL=http://localstack:4566
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - vetta-net
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: vetta-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=vetta_user
+      - POSTGRES_PASSWORD=vetta_secret
+      - POSTGRES_DB=vetta_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vetta_user -d vetta_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vetta-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: vetta-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vetta-net
+
+  localstack:
+    image: localstack/localstack:latest
+    container_name: vetta-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=us-east-1
+    volumes:
+      - localstack:/var/lib/localstack
+    networks:
+      - vetta-net
+
+networks:
+  vetta-net:
+    driver: bridge
+
+volumes:
+  pgdata:
+  redisdata:
+  localstack:

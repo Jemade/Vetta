@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: vetta
+    runtime: python
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: LOG_LEVEL
+        value: INFO
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "60"
+      - key: DATABASE_URL
+        value: sqlite+aiosqlite:///./vetta.db
+      - key: LLM_MODEL
+        value: gemini-3.6-flash
+      - key: GOOGLE_API_KEY
+        sync: false

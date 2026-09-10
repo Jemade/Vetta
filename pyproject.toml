@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vetta"
+version = "1.0.0"
+description = "Vetta: Production-grade Automated Interview Assessment Platform"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Jayden Mapasure" }
+]
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "slowapi>=0.1.9",
+    "python-multipart>=0.0.9",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "sqlalchemy>=2.0.30",
+    "aiosqlite>=0.20.0",
+    "asyncpg>=0.29.0",
+    "celery>=5.4.0",
+    "redis>=5.0.0",
+    "boto3>=1.34.0",
+    "botocore>=1.34.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["."]

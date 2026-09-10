@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VETTA | Autonomous Interview Assessment & Intelligence</title>
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/static/assets/favicon.svg" />
+  <link rel="alternate icon" href="/favicon.ico" />
+
+  <!-- Tailwind CSS & Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            app: '#080808',
+            sidebar: '#0B0B0C',
+            surface: {
+              primary: '#101011',
+              secondary: '#141416',
+              hover: '#19191B',
+            },
+            border: {
+              subtle: '#252527',
+              strong: '#303034',
+            },
+            text: {
+              primary: '#F5F5F5',
+              secondary: '#B4B4BA',
+              muted: '#77777F',
+            },
+            vetta: {
+              orange: '#FF5A1F',
+              hover: '#FF6B32',
+              dark: '#C9420E',
+            },
+            semantic: {
+              success: '#28C76F',
+              warning: '#F5A524',
+              danger: '#E5484D',
+              info: '#6EA8FE',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #080808;
+      color: #F5F5F5;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .waveform-bar {
+      transition: height 0.15s ease, background-color 0.15s ease;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #080808;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #252527;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #303034;
+    }
+
+    /* Enterprise Print Stylesheet */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #111827 !important;
+      }
+      aside, header, #startup-screen, #toast, button, #dossier-audio-player, #dossier-audio-empty, #dossier-empty-state {
+        display: none !important;
+      }
+      .ml-60 {
+        margin-left: 0 !important;
+      }
+      main {
+        padding: 0 !important;
+      }
+      #view-dossier, #dossier-content {
+        display: block !important;
+      }
+      .bg-surface-primary, .bg-surface-secondary, .bg-app {
+        background: #ffffff !important;
+        border: 1px solid #e5e7eb !important;
+        color: #111827 !important;
+      }
+      .text-text-primary, .text-text-secondary, .text-text-muted {
+        color: #111827 !important;
+      }
+      .border-border-subtle, .border-border-strong {
+        border-color: #e5e7eb !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-app text-text-primary min-h-screen selection:bg-vetta-orange selection:text-black antialiased flex">
+
+  <!-- ==================== 10-SECOND DELIBERATE STARTUP EXPERIENCE ==================== -->
+  <div id="startup-screen" class="fixed inset-0 z-50 bg-[#080808] flex flex-col items-center justify-center select-none overflow-hidden transition-all duration-700">
+    <!-- Subtle ambient radial background -->
+    <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_45%,rgba(255,90,31,0.07)_0%,transparent_75%)]"></div>
+
+    <!-- Quick Skip Action -->
+    <div class="absolute top-6 right-8">
+      <button onclick="skipStartupSequence()" class="text-xs font-mono text-text-muted hover:text-text-primary px-3 py-1.5 rounded-md bg-surface-primary/40 hover:bg-surface-secondary border border-border-subtle hover:border-border-strong transition flex items-center space-x-1.5">
+        <span>Skip to Workspace</span>
+        <span class="text-[10px] text-text-muted">&rarr;</span>
+      </button>
+    </div>
+
+    <div class="relative z-10 flex flex-col items-center max-w-xl w-full px-6 text-center">
+      
+      <!-- 0-2s: Big Free-Floating 3D Emblem - NO BOX FRAME -->
+      <div id="startup-emblem" class="w-40 h-40 md:w-48 md:h-48 flex items-center justify-center opacity-0 scale-90 transition-all duration-1000 ease-out mb-4 select-none">
+        <img src="/static/assets/vetta_emblem.png" alt="VETTA Emblem" class="w-full h-full object-contain filter drop-shadow-[0_0_40px_rgba(255,90,31,0.45)]" onerror="this.src='/static/assets/vetta_logo.jpg'" />
+      </div>
+
+      <!-- 2-4s: Subtitle Reveal -->
+      <div id="startup-brand" class="opacity-0 translate-y-2 transition-all duration-700 ease-out mb-8">
+        <p class="text-xs md:text-sm text-text-secondary font-mono tracking-[0.25em] uppercase font-semibold">Autonomous Interview Assessment &amp; Intelligence</p>
+      </div>
+
+      <!-- 4-7s: Smooth Progress Track & Real Readiness Probe -->
+      <div id="startup-progress-container" class="w-full max-w-sm space-y-3">
+        <div class="w-full bg-[#141416] border border-[#252527] rounded-full h-2 overflow-hidden shadow-inner">
+          <div id="startup-progress-bar" class="bg-vetta-orange h-full rounded-full transition-all duration-150 ease-out shadow-[0_0_12px_rgba(255,90,31,0.8)]" style="width: 0%;"></div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs font-mono text-text-muted">
+          <span id="startup-status-text" class="text-text-secondary font-medium truncate max-w-[240px]">Initializing VETTA runtime...</span>
+          <span id="startup-percentage" class="text-vetta-orange font-bold">0%</span>
+        </div>
+      </div>
+
+      <!-- Error State Card (shown only if /health/ready probe fails) -->
+      <div id="startup-error-card" class="hidden w-full max-w-sm mt-4 p-4 rounded-lg bg-surface-primary border border-semantic-danger/30 text-left space-y-3 shadow-2xl">
+        <div class="flex items-center space-x-2 text-semantic-danger text-xs font-semibold">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Application Readiness Verification Failed</span>
+        </div>
+        <p class="text-[11px] text-text-muted leading-relaxed">
+          The VETTA engine could not confirm readiness. Backend services may still be starting or unreachable.
+        </p>
+        <div class="flex items-center space-x-2 pt-1">
+          <button onclick="retryStartupReadiness()" class="px-3 py-1.5 rounded-md bg-vetta-orange hover:bg-vetta-hover text-black text-xs font-semibold transition">
+            Retry Check
+          </button>
+          <button onclick="toggleStartupDiagnostics()" class="px-3 py-1.5 rounded-md bg-surface-secondary hover:bg-surface-hover text-text-secondary border border-border-subtle text-xs font-medium transition">
+            View Diagnostics
+          </button>
+          <button onclick="skipStartupSequence()" class="px-2.5 py-1.5 rounded-md hover:bg-surface-hover text-text-muted hover:text-text-primary text-xs font-mono transition ml-auto">
+            Proceed &rarr;
+          </button>
+        </div>
+        <div id="startup-diagnostics-box" class="hidden pt-2 border-t border-border-subtle text-[10px] font-mono text-text-muted space-y-1">
+          <div>Probe Target: <code class="text-text-secondary">/health/ready</code></div>
+          <div id="startup-diag-error">Status: Unreachable</div>
+          <div>Logged At: <span id="startup-diag-time"></span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== APPLICATION SHELL: PERSISTENT SIDEBAR ==================== -->
+  <aside class="w-60 bg-sidebar border-r border-border-subtle h-screen fixed left-0 top-0 z-30 flex flex-col justify-between select-none">
+    
+    <div class="flex flex-col">
+      <!-- Brand Lockup: Clean, prominent, no box frame -->
+      <div class="h-16 px-5 flex items-center border-b border-border-subtle">
+        <a href="javascript:void(0)" onclick="switchView('overview')" class="flex items-center space-x-3 group">
+          <img src="/static/assets/vetta_emblem.png" alt="VETTA" class="h-8 w-8 object-contain flex-shrink-0 filter drop-shadow-[0_0_10px_rgba(255,90,31,0.35)]" onerror="this.src='/static/assets/vetta_logo.jpg'" />
+          <div class="flex items-center space-x-2">
+            <span class="font-black text-lg tracking-tight text-white group-hover:text-vetta-orange transition">VETTA</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-secondary text-text-muted border border-border-subtle font-semibold">v2.4</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="px-3 py-4 space-y-6 overflow-y-auto">
+        
+        <!-- Group: WORKSPACE -->
+        <div class="space-y-1">
+          <span class="px-2 text-[10px] font-bold uppercase tracking-wider text-text-muted block mb-1.5">Workspace</span>
+          
+          <button onclick="switchView('overview')" id="nav-overview" class="w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-primary bg-surface-primary border border-border-subtle shadow-sm">
+            <svg class="w-4 h-4 text-vetta-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Overview</span>
+          </button>
+
+          <button onclick="switchView('assessments')" id="nav-assessments" class="w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-secondary hover:text-text-primary hover:bg-surface-secondary">
+            <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            <span>Assessment Studio</span>
+          </button>
+        </div>
+
+        <!-- Group: CANDIDATE INTELLIGENCE -->
+        <div class="space-y-1">
+          <span class="px-2 text-[10px] font-bold uppercase tracking-wider text-text-muted block mb-1.5">Intelligence</span>
+
+          <button onclick="switchView('dossier')" id="nav-dossier" class="w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-secondary hover:text-text-primary hover:bg-surface-secondary">
+            <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>Candidate Dossier</span>
+          </button>
+
+          <button onclick="switchView('candidates')" id="nav-candidates" class="w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-secondary hover:text-text-primary hover:bg-surface-secondary">
+            <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>Candidates Directory</span>
+          </button>
+
+          <button onclick="switchView('pipeline')" id="nav-pipeline" class="w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-secondary hover:text-text-primary hover:bg-surface-secondary">
+            <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="6" height="14" x="4" y="5" rx="1"/><rect width="6" height="10" x="14" y="9" rx="1"/></svg>
+            <span>Hiring Pipeline</span>
+          </button>
+
+          <button onclick="switchView('competencies')" id="nav-competencies" class="w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-secondary hover:text-text-primary hover:bg-surface-secondary">
+            <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m12 2 3 7-7 3 7 3-3 7"/></svg>
+            <span>Competency Radar</span>
+          </button>
+
+          <button onclick="switchView('analytics')" id="nav-analytics" class="w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-secondary hover:text-text-primary hover:bg-surface-secondary">
+            <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            <span>Analytics & Velocity</span>
+          </button>
+        </div>
+
+        <!-- Group: GOVERNANCE & SETTINGS -->
+        <div class="space-y-1">
+          <span class="px-2 text-[10px] font-bold uppercase tracking-wider text-text-muted block mb-1.5">Governance</span>
+
+          <button onclick="switchView('audit')" id="nav-audit" class="w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-secondary hover:text-text-primary hover:bg-surface-secondary">
+            <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Audit Log</span>
+          </button>
+
+          <button onclick="switchView('settings')" id="nav-settings" class="w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-secondary hover:text-text-primary hover:bg-surface-secondary">
+            <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>Settings</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="p-3 border-t border-border-subtle space-y-2">
+      <div class="flex items-center justify-between px-2 py-1 text-[11px] font-mono">
+        <div class="flex items-center space-x-2">
+          <span class="h-2 w-2 rounded-full bg-semantic-success animate-pulse"></span>
+          <span class="text-text-secondary font-medium">Engine Online</span>
+        </div>
+        <span class="text-[10px] font-mono text-text-muted">v1.0 API</span>
+      </div>
+
+      <div class="flex items-center space-x-2.5 px-2 py-1.5 rounded-lg bg-surface-secondary border border-border-subtle">
+        <div class="h-7 w-7 rounded-md bg-surface-primary border border-border-strong flex items-center justify-center font-mono text-xs font-bold text-vetta-orange">
+          JM
+        </div>
+        <div class="flex-1 min-w-0">
+          <span class="block text-xs font-semibold text-text-primary truncate">Jayden Mapasure</span>
+          <span class="block text-[10px] text-text-muted truncate">Hiring Lead</span>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- TOP CONTEXT BAR -->
+  <div class="ml-60 flex-1 flex flex-col min-w-0">
+    <header class="h-14 bg-app border-b border-border-subtle px-8 flex items-center justify-between sticky top-0 z-20">
+      
+      <div class="flex items-center space-x-3">
+        <h1 id="context-title" class="text-sm font-semibold text-text-primary tracking-tight">Overview</h1>
+        <span class="text-border-subtle">/</span>
+        <span id="context-subtitle" class="text-xs text-text-muted">Command center & intelligence summary</span>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <div class="relative hidden sm:block">
+          <svg class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="global-search" oninput="handleGlobalSearch(this.value)" placeholder="Search candidate or role..." class="bg-surface-primary border border-border-subtle rounded-md pl-8 pr-12 py-1 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-vetta-orange w-60 transition">
+          <span class="absolute right-2.5 top-1.5 text-[10px] font-mono text-text-muted px-1 rounded bg-surface-secondary border border-border-subtle">⌘K</span>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-surface-primary border border-border-subtle text-[11px]">
+          <span class="h-1.5 w-1.5 rounded-full bg-vetta-orange"></span>
+          <span class="text-text-muted font-mono">Vault:</span>
+          <span class="text-text-secondary font-mono font-medium" id="vault-status">AWS S3</span>
+        </div>
+
+        <a href="/docs" target="_blank" class="px-2.5 py-1 rounded-md bg-surface-primary hover:bg-surface-hover text-text-secondary hover:text-text-primary border border-border-subtle text-xs font-medium transition flex items-center space-x-1.5">
+          <span>Docs</span>
+          <svg class="w-3 h-3 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+        </a>
+      </div>
+
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 p-8 overflow-y-auto">
+      
+      <!-- VIEW 1: OVERVIEW -->
+      <section id="view-overview" class="space-y-6">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-2 gap-4">
+          <div>
+            <h2 class="text-xl font-bold tracking-tight text-text-primary">Good morning, Jayden</h2>
+            <p class="text-xs text-text-secondary mt-0.5">Your hiring intelligence workspace</p>
+          </div>
+          <button onclick="switchView('assessments')" class="px-3.5 py-2 rounded-md bg-vetta-orange hover:bg-vetta-hover text-black font-semibold text-xs tracking-wide transition flex items-center space-x-2 shadow-sm">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>+ New Assessment</span>
+          </button>
+        </div>
+
+        <!-- KPI Metrics -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-4 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-text-muted font-medium">Assessments</span>
+              <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="text-2xl font-bold font-mono text-text-primary tracking-tight" id="kpi-total">0</div>
+            <p class="text-[11px] text-text-muted font-mono">Total completed evaluations</p>
+          </div>
+
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-4 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-text-muted font-medium">Strong Hires</span>
+              <span class="h-2 w-2 rounded-full bg-semantic-success"></span>
+            </div>
+            <div class="text-2xl font-bold font-mono text-semantic-success tracking-tight" id="kpi-hires">0</div>
+            <p class="text-[11px] text-text-muted font-mono">&ge; 7.5 composite threshold</p>
+          </div>
+
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-4 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-text-muted font-medium">Review Needed</span>
+              <span class="h-2 w-2 rounded-full bg-semantic-warning"></span>
+            </div>
+            <div class="text-2xl font-bold font-mono text-semantic-warning tracking-tight" id="kpi-reviews">0</div>
+            <p class="text-[11px] text-text-muted font-mono">&lt; 7.5 requiring probing</p>
+          </div>
+
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-4 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-text-muted font-medium">Currently Evaluating</span>
+              <span class="h-2 w-2 rounded-full bg-vetta-orange animate-pulse"></span>
+            </div>
+            <div class="text-2xl font-bold font-mono text-vetta-orange tracking-tight" id="kpi-evaluating">0</div>
+            <p class="text-[11px] text-text-muted font-mono">In-progress worker tasks</p>
+          </div>
+
+        </div>
+
+        <!-- Assessment Activity Section -->
+        <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xs font-semibold text-text-primary">Assessment Activity</h3>
+              <p class="text-[11px] text-text-muted">Throughput distribution over assessment lifecycle</p>
+            </div>
+            <span class="text-[10px] font-mono text-text-muted">Real-time telemetry</span>
+          </div>
+
+          <div id="activity-chart-container" class="py-10 text-center space-y-2 border border-dashed border-border-subtle rounded-md bg-surface-secondary/40">
+            <svg class="w-8 h-8 text-text-muted mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            <p class="text-xs text-text-secondary font-medium">No assessment activity recorded yet</p>
+            <p class="text-[11px] text-text-muted max-w-sm mx-auto">As candidates are evaluated, pipeline throughput and competency velocity will render here.</p>
+          </div>
+        </div>
+
+        <!-- Recent Candidates Table -->
+        <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xs font-semibold text-text-primary">Recent Candidates</h3>
+              <p class="text-[11px] text-text-muted">Latest assessments evaluated by the dual-agent engine</p>
+            </div>
+            <button onclick="switchView('candidates')" class="text-xs font-medium text-vetta-orange hover:text-vetta-hover transition">
+              View all directory &rarr;
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="border-b border-border-subtle text-text-muted text-[10px] uppercase font-mono">
+                <tr>
+                  <th class="py-2 px-3">Candidate</th>
+                  <th class="py-2 px-3">Target Role</th>
+                  <th class="py-2 px-3 text-center">Overall</th>
+                  <th class="py-2 px-3 text-center">Technical</th>
+                  <th class="py-2 px-3 text-center">Communication</th>
+                  <th class="py-2 px-3">Status</th>
+                  <th class="py-2 px-3">Evaluated</th>
+                  <th class="py-2 px-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="overview-candidates-body" class="divide-y divide-border-subtle text-text-secondary font-mono">
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Overview Empty State -->
+          <div id="overview-empty-state" class="py-12 text-center space-y-3 hidden">
+            <div class="h-9 w-9 mx-auto rounded-md bg-surface-secondary border border-border-subtle flex items-center justify-center text-text-muted">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <div class="space-y-1">
+              <h4 class="text-xs font-semibold text-text-primary">No candidates have been evaluated yet</h4>
+              <p class="text-[11px] text-text-muted max-w-sm mx-auto">Your assessment workspace is ready. Create your first assessment to begin building candidate intelligence.</p>
+            </div>
+            <button onclick="switchView('assessments')" class="px-3 py-1.5 rounded-md bg-surface-secondary hover:bg-surface-hover text-vetta-orange border border-border-subtle text-xs font-medium transition">
+              + New Assessment
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- VIEW 2: ASSESSMENT STUDIO -->
+      <section id="view-assessments" class="hidden space-y-6 max-w-4xl">
+        
+        <div class="pb-2">
+          <h2 class="text-xl font-bold tracking-tight text-text-primary">New Assessment</h2>
+          <p class="text-xs text-text-secondary mt-0.5">Configure candidate intake material for dual-agent synthesis</p>
+        </div>
+
+        <!-- Role Benchmark Presets -->
+        <div class="bg-surface-primary border border-border-subtle rounded-lg p-4 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-text-muted">Role Benchmark Templates (Click to populate intake form)</span>
+            <span class="text-[10px] font-mono text-vetta-orange">Configuration Presets</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <button type="button" onclick="loadBenchmarkPreset('architect')" class="text-left p-3 rounded-md bg-surface-secondary hover:bg-surface-hover border border-border-subtle transition group">
+              <span class="block text-xs font-semibold text-text-primary group-hover:text-vetta-orange">Lead Cloud Architect</span>
+              <span class="block text-[10px] text-text-muted font-mono mt-0.5">Distributed Kubernetes & AWS</span>
+            </button>
+            <button type="button" onclick="loadBenchmarkPreset('fullstack')" class="text-left p-3 rounded-md bg-surface-secondary hover:bg-surface-hover border border-border-subtle transition group">
+              <span class="block text-xs font-semibold text-text-primary group-hover:text-vetta-orange">Senior Fullstack Engineer</span>
+              <span class="block text-[10px] text-text-muted font-mono mt-0.5">FastAPI, Redis, React</span>
+            </button>
+            <button type="button" onclick="loadBenchmarkPreset('junior')" class="text-left p-3 rounded-md bg-surface-secondary hover:bg-surface-hover border border-border-subtle transition group">
+              <span class="block text-xs font-semibold text-text-primary group-hover:text-vetta-orange">Associate Python Dev</span>
+              <span class="block text-[10px] text-text-muted font-mono mt-0.5">Core Python & Algorithms</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="assessment-intake-form" onsubmit="handleStartAssessment(event)" class="space-y-5">
+          
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-4">
+            <h3 class="text-xs font-semibold text-text-primary border-b border-border-subtle pb-2">Candidate Information</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-[11px] font-medium text-text-secondary mb-1">Full Name <span class="text-semantic-danger">*</span></label>
+                <input required id="form-name" type="text" placeholder="e.g. Marcus Vance" class="w-full bg-app border border-border-subtle rounded-md px-3 py-1.5 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-vetta-orange transition">
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium text-text-secondary mb-1">Target Role <span class="text-semantic-danger">*</span></label>
+                <input required id="form-role" type="text" placeholder="e.g. Lead Cloud Architect" class="w-full bg-app border border-border-subtle rounded-md px-3 py-1.5 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-vetta-orange transition">
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium text-text-secondary mb-1">Email</label>
+                <input id="form-email" type="email" placeholder="m.vance@example.com" class="w-full bg-app border border-border-subtle rounded-md px-3 py-1.5 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-vetta-orange transition">
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-border-subtle pb-2">
+              <h3 class="text-xs font-semibold text-text-primary">Interview Material Ingestion</h3>
+              <span class="text-[10px] font-mono text-text-muted" id="word-count-badge">0 words</span>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-medium text-text-secondary mb-1">Interview Dialogue Transcript <span class="text-semantic-danger">*</span></label>
+              <textarea required id="form-transcript" rows="8" placeholder="Paste interview conversation dialogue between interviewer and candidate..." oninput="updateTranscriptWordCount(this.value)" class="w-full bg-app border border-border-subtle rounded-md p-3 text-xs text-text-primary font-mono placeholder:text-text-muted focus:outline-none focus:border-vetta-orange transition leading-relaxed"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-medium text-text-secondary mb-1">Audio Recording or Supporting File (AWS S3)</label>
+              <div class="border border-dashed border-border-subtle hover:border-border-strong rounded-md p-4 text-center bg-surface-secondary/40 transition">
+                <input type="file" id="form-file" class="hidden" onchange="handleFileSelected(this)">
+                <label for="form-file" class="cursor-pointer space-y-1 block">
+                  <svg class="w-6 h-6 text-text-muted mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span class="text-xs text-text-secondary font-medium block">Click to upload or drag and drop</span>
+                  <span class="text-[10px] text-text-muted font-mono block">Accepted formats: .mp3, .wav, .m4a, .pdf, .txt (Max 100MB)</span>
+                  <span id="file-selected-name" class="text-[11px] font-mono text-vetta-orange font-semibold block pt-1"></span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flex items-center justify-end space-x-3 pt-2">
+            <button type="button" onclick="switchView('overview')" class="px-4 py-2 rounded-md bg-surface-secondary hover:bg-surface-hover text-text-secondary hover:text-text-primary border border-border-subtle text-xs font-medium transition">
+              Cancel
+            </button>
+            <button type="submit" id="submit-assessment-btn" class="px-5 py-2 rounded-md bg-vetta-orange hover:bg-vetta-hover active:scale-[0.99] text-black font-semibold text-xs tracking-wide transition flex items-center space-x-2 shadow-sm">
+              <span id="submit-btn-text">Start Assessment</span>
+              <svg id="submit-spinner" class="hidden animate-spin h-3.5 w-3.5 text-black" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+            </button>
+          </div>
+
+        </form>
+
+      </section>
+
+      <!-- VIEW 3: ASSESSMENT PROCESSING TIMELINE -->
+      <section id="view-processing" class="hidden max-w-xl mx-auto py-12 space-y-6">
+        <div class="bg-surface-primary border border-border-subtle rounded-lg p-6 space-y-6 shadow-md">
+          
+          <div class="flex items-center justify-between border-b border-border-subtle pb-4">
+            <div>
+              <span class="text-[10px] font-mono text-vetta-orange uppercase font-bold tracking-wider">Evaluation In Progress</span>
+              <h3 class="text-base font-bold text-text-primary mt-0.5" id="processing-candidate-name">Preparing Assessment</h3>
+              <p class="text-xs text-text-muted font-mono" id="processing-task-id">Assessment #--</p>
+            </div>
+            <div class="h-8 w-8 rounded-md bg-surface-secondary border border-border-subtle flex items-center justify-center">
+              <svg class="animate-spin h-4 w-4 text-vetta-orange" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+            </div>
+          </div>
+
+          <div class="space-y-3.5 text-xs font-mono">
+            <div class="flex items-center space-x-3 text-semantic-success" id="step-payload">
+              <span class="h-4 w-4 rounded-full bg-semantic-success/15 border border-semantic-success/30 flex items-center justify-center text-[10px] font-bold">✓</span>
+              <span>Payload validated & storage vault registered</span>
+            </div>
+            <div class="flex items-center space-x-3 text-semantic-success" id="step-transcript">
+              <span class="h-4 w-4 rounded-full bg-semantic-success/15 border border-semantic-success/30 flex items-center justify-center text-[10px] font-bold">✓</span>
+              <span>Transcript indexed & tokenized</span>
+            </div>
+            <div class="flex items-center space-x-3 text-vetta-orange font-semibold" id="step-tech">
+              <span class="h-4 w-4 rounded-full bg-vetta-orange/20 border border-vetta-orange flex items-center justify-center text-[10px] animate-pulse">●</span>
+              <span>Technical Reviewer analyzing system design & code</span>
+            </div>
+            <div class="flex items-center space-x-3 text-text-muted" id="step-soft">
+              <span class="h-4 w-4 rounded-full bg-surface-secondary border border-border-subtle flex items-center justify-center text-[10px]">○</span>
+              <span>Soft Skills Assessor evaluating articulation & clarity</span>
+            </div>
+            <div class="flex items-center space-x-3 text-text-muted" id="step-synth">
+              <span class="h-4 w-4 rounded-full bg-surface-secondary border border-border-subtle flex items-center justify-center text-[10px]">○</span>
+              <span>Scorecard Synthesizer compiling intelligence</span>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-border-subtle text-[11px] text-text-muted flex items-center justify-between">
+            <span>Deterministic multi-agent pipeline</span>
+            <span class="font-mono" id="processing-timer">Elapsed: 0.0s</span>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- VIEW 4: CANDIDATE DOSSIER -->
+      <section id="view-dossier" class="hidden space-y-6 max-w-5xl">
+        
+        <!-- Empty State (When no candidate is selected) -->
+        <div id="dossier-empty-state" class="py-20 text-center space-y-3 bg-surface-primary border border-dashed border-border-subtle rounded-lg">
+          <div class="h-10 w-10 mx-auto rounded-md bg-surface-secondary border border-border-subtle flex items-center justify-center text-text-muted">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-sm font-semibold text-text-primary">No Candidate Selected</h3>
+            <p class="text-xs text-text-muted max-w-sm mx-auto">Select a candidate from the directory or pipeline to inspect their intelligence dossier.</p>
+          </div>
+          <button onclick="switchView('candidates')" class="px-3.5 py-1.5 rounded-md bg-surface-secondary hover:bg-surface-hover text-vetta-orange border border-border-subtle text-xs font-medium transition">
+            View Candidates Directory
+          </button>
+        </div>
+
+        <!-- Populated Dossier Content (Shown when active candidate is loaded) -->
+        <div id="dossier-content" class="hidden space-y-6">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-border-subtle gap-4">
+            <div class="flex items-center space-x-3.5">
+              <div id="dossier-avatar" class="h-10 w-10 rounded-md bg-surface-secondary border border-border-strong flex items-center justify-center font-mono font-bold text-text-primary text-sm">
+                --
+              </div>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h2 id="dossier-name" class="text-lg font-bold text-text-primary tracking-tight">Candidate Name</h2>
+                  <span id="dossier-recommendation-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-semantic-success/15 text-semantic-success border border-semantic-success/30">
+                    Strong Hire
+                  </span>
+                </div>
+                <p id="dossier-meta" class="text-xs text-text-muted font-mono mt-0.5">Role: -- &bull; Assessment: #--</p>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-2.5">
+              <button onclick="copyDossierJSON()" class="px-3 py-1.5 rounded-md bg-surface-primary hover:bg-surface-hover text-text-secondary hover:text-text-primary border border-border-subtle text-xs font-medium transition">
+                Export JSON
+              </button>
+              <button onclick="window.print()" class="px-3 py-1.5 rounded-md bg-surface-primary hover:bg-surface-hover text-text-secondary hover:text-text-primary border border-border-subtle text-xs font-medium transition">
+                Print Report
+              </button>
+              <button onclick="deleteCurrentDossier()" class="px-3 py-1.5 rounded-md bg-surface-primary hover:bg-semantic-danger/20 text-text-muted hover:text-semantic-danger border border-border-subtle text-xs font-medium transition">
+                Delete
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <div class="lg:col-span-8 space-y-5">
+              
+              <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-3">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-text-muted block">Overall Assessment</span>
+                <div class="flex items-baseline space-x-3">
+                  <span id="dossier-overall-score" class="text-3xl font-bold font-mono text-text-primary tracking-tight">0.0</span>
+                  <span class="text-xs text-text-muted font-mono">/ 10</span>
+                </div>
+                <p id="dossier-summary-text" class="text-xs text-text-secondary leading-relaxed font-normal">
+                  Assessment summary will display here upon evaluation.
+                </p>
+              </div>
+
+              <!-- Score Blocks -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <div class="bg-surface-primary border border-border-subtle rounded-lg p-4 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-text-primary">Technical Depth</span>
+                    <span class="text-sm font-bold font-mono text-vetta-orange" id="dossier-tech-score">0.0 / 10</span>
+                  </div>
+                  <div class="space-y-2 text-[11px] font-mono text-text-muted">
+                    <div>
+                      <div class="flex justify-between mb-1"><span>Architecture</span><span id="sub-arch">0.0</span></div>
+                      <div class="w-full bg-surface-secondary rounded-full h-1"><div id="bar-arch" class="bg-vetta-orange h-full rounded-full" style="width: 0%;"></div></div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between mb-1"><span>Code Quality</span><span id="sub-code">0.0</span></div>
+                      <div class="w-full bg-surface-secondary rounded-full h-1"><div id="bar-code" class="bg-vetta-orange h-full rounded-full" style="width: 0%;"></div></div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between mb-1"><span>Problem Solving</span><span id="sub-prob">0.0</span></div>
+                      <div class="w-full bg-surface-secondary rounded-full h-1"><div id="bar-prob" class="bg-vetta-orange h-full rounded-full" style="width: 0%;"></div></div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between mb-1"><span>Ownership</span><span id="sub-own">0.0</span></div>
+                      <div class="w-full bg-surface-secondary rounded-full h-1"><div id="bar-own" class="bg-vetta-orange h-full rounded-full" style="width: 0%;"></div></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-surface-primary border border-border-subtle rounded-lg p-4 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-text-primary">Communication</span>
+                    <span class="text-sm font-bold font-mono text-semantic-success" id="dossier-comm-score">0.0 / 10</span>
+                  </div>
+                  <div class="space-y-2 text-[11px] font-mono text-text-muted">
+                    <div>
+                      <div class="flex justify-between mb-1"><span>Structure</span><span id="sub-struct">0.0</span></div>
+                      <div class="w-full bg-surface-secondary rounded-full h-1"><div id="bar-struct" class="bg-semantic-success h-full rounded-full" style="width: 0%;"></div></div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between mb-1"><span>Clarity</span><span id="sub-clarity">0.0</span></div>
+                      <div class="w-full bg-surface-secondary rounded-full h-1"><div id="bar-clarity" class="bg-semantic-success h-full rounded-full" style="width: 0%;"></div></div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between mb-1"><span>Conciseness</span><span id="sub-concise">0.0</span></div>
+                      <div class="w-full bg-surface-secondary rounded-full h-1"><div id="bar-concise" class="bg-semantic-success h-full rounded-full" style="width: 0%;"></div></div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between mb-1"><span>Collaboration</span><span id="sub-collab">0.0</span></div>
+                      <div class="w-full bg-surface-secondary rounded-full h-1"><div id="bar-collab" class="bg-semantic-success h-full rounded-full" style="width: 0%;"></div></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Audio Player (Clean zero fake data: only renders player if audio attached, otherwise calm empty notice) -->
+              <div id="dossier-audio-active" class="hidden bg-surface-primary border border-border-subtle rounded-lg p-4 flex items-center space-x-4">
+                <button onclick="toggleAudio()" id="dossier-audio-btn" class="h-8 w-8 rounded-md bg-vetta-orange hover:bg-vetta-hover text-black flex items-center justify-center font-bold flex-shrink-0 transition">
+                  <svg id="audio-play-icon" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  <svg id="audio-pause-icon" class="w-3.5 h-3.5 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                </button>
+                <div class="flex-1 space-y-1.5">
+                  <div class="flex items-center justify-between text-[10px] font-mono">
+                    <span class="text-text-secondary font-medium">Interview Audio Artifact</span>
+                    <span id="dossier-audio-timer" class="text-text-muted">00:00 / --:--</span>
+                  </div>
+                  <div class="w-full bg-surface-secondary rounded-full h-1.5 overflow-hidden">
+                    <div id="dossier-audio-progress" class="bg-vetta-orange h-full rounded-full transition-all" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="dossier-audio-empty" class="bg-surface-primary border border-border-subtle rounded-lg p-4 flex items-center space-x-3 text-xs text-text-muted font-mono">
+                <svg class="w-4 h-4 text-text-muted flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                <span>No recording attached. An interview recording will appear here when one is uploaded.</span>
+              </div>
+
+              <!-- Areas to Probe (Gaps) -->
+              <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-text-primary">Areas to Probe (Identified Gaps)</span>
+                  <span class="text-[10px] font-mono text-semantic-warning font-semibold" id="dossier-gaps-count">0 items</span>
+                </div>
+                <div id="dossier-gaps-list" class="space-y-2">
+                </div>
+              </div>
+
+              <!-- Follow-up Questions -->
+              <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-text-primary">Recommended Follow-Up Questions</span>
+                  <span class="text-[10px] font-mono text-text-muted">Second-Round Probing</span>
+                </div>
+                <div id="dossier-questions-list" class="space-y-2.5">
+                </div>
+              </div>
+
+              <!-- Agent Remarks -->
+              <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-3">
+                <span class="text-xs font-semibold text-text-primary block">Agent Remarks & Audit Trail</span>
+                <div class="space-y-2 text-xs">
+                  <details class="group border border-border-subtle rounded-md p-3 bg-surface-secondary/40">
+                    <summary class="cursor-pointer font-medium text-text-primary flex items-center justify-between select-none">
+                      <span>Technical Reviewer Notes</span>
+                      <span class="text-[10px] font-mono text-text-muted group-open:rotate-180 transition">&darr;</span>
+                    </summary>
+                    <p id="dossier-tech-notes" class="mt-2 text-text-secondary text-[11px] font-mono leading-relaxed"></p>
+                  </details>
+
+                  <details class="group border border-border-subtle rounded-md p-3 bg-surface-secondary/40">
+                    <summary class="cursor-pointer font-medium text-text-primary flex items-center justify-between select-none">
+                      <span>Soft Skills Assessor Notes</span>
+                      <span class="text-[10px] font-mono text-text-muted group-open:rotate-180 transition">&darr;</span>
+                    </summary>
+                    <p id="dossier-comm-notes" class="mt-2 text-text-secondary text-[11px] font-mono leading-relaxed"></p>
+                  </details>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Column: 5-Axis Radar Chart & Deltas -->
+            <div class="lg:col-span-4 space-y-5">
+              <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-4">
+                <div>
+                  <h3 class="text-xs font-semibold text-text-primary">Competency Radar</h3>
+                  <p class="text-[10px] text-text-muted font-mono">Candidate vs Enterprise Benchmark (7.5)</p>
+                </div>
+
+                <div class="relative w-full aspect-square flex items-center justify-center">
+                  <svg class="w-full h-full" viewBox="0 0 300 300">
+                    <polygon points="150,20 274,110 226,260 74,260 26,110" fill="none" stroke="#252527" stroke-width="1" />
+                    <polygon points="150,55 243,122 207,237 93,237 57,122" fill="none" stroke="#252527" stroke-width="1" />
+                    <polygon points="150,90 212,135 188,215 112,215 88,135" fill="none" stroke="#252527" stroke-width="1" />
+                    <polygon points="150,125 181,147 169,192 131,192 119,147" fill="none" stroke="#252527" stroke-width="1" />
+
+                    <line x1="150" y1="150" x2="150" y2="20" stroke="#252527" stroke-width="1" />
+                    <line x1="150" y1="150" x2="274" y2="110" stroke="#252527" stroke-width="1" />
+                    <line x1="150" y1="150" x2="226" y2="260" stroke="#252527" stroke-width="1" />
+                    <line x1="150" y1="150" x2="74" y2="260" stroke="#252527" stroke-width="1" />
+                    <line x1="150" y1="150" x2="26" y2="110" stroke="#252527" stroke-width="1" />
+
+                    <!-- Benchmark Polygon (7.5 dashed) -->
+                    <polygon points="150,53 243,120 207,233 93,233 57,120" fill="rgba(255,255,255,0.02)" stroke="#77777F" stroke-width="1" stroke-dasharray="3" />
+
+                    <!-- Dynamic Candidate Polygon -->
+                    <polygon id="dossier-radar-poly" points="150,150 150,150 150,150 150,150 150,150" fill="rgba(255, 90, 31, 0.15)" stroke="#FF5A1F" stroke-width="2" class="transition-all duration-300" />
+                    
+                    <circle id="dossier-pt-1" cx="150" cy="150" r="3.5" fill="#FF5A1F" />
+                    <circle id="dossier-pt-2" cx="150" cy="150" r="3.5" fill="#FF5A1F" />
+                    <circle id="dossier-pt-3" cx="150" cy="150" r="3.5" fill="#FF5A1F" />
+                    <circle id="dossier-pt-4" cx="150" cy="150" r="3.5" fill="#FF5A1F" />
+                    <circle id="dossier-pt-5" cx="150" cy="150" r="3.5" fill="#FF5A1F" />
+                  </svg>
+
+                  <span class="absolute top-0 text-[9px] font-mono text-text-muted">Architecture</span>
+                  <span class="absolute right-0 top-20 text-[9px] font-mono text-text-muted">Coding</span>
+                  <span class="absolute right-4 bottom-1 text-[9px] font-mono text-text-muted">Comm</span>
+                  <span class="absolute left-4 bottom-1 text-[9px] font-mono text-text-muted">Problem</span>
+                  <span class="absolute left-0 top-20 text-[9px] font-mono text-text-muted">Ownership</span>
+                </div>
+
+                <div class="border-t border-border-subtle pt-3 space-y-1.5 text-xs font-mono">
+                  <div class="flex items-center justify-between" id="delta-arch">
+                    <span>Architecture</span>
+                    <span class="text-text-muted">--</span>
+                  </div>
+                  <div class="flex items-center justify-between" id="delta-code">
+                    <span>Coding</span>
+                    <span class="text-text-muted">--</span>
+                  </div>
+                  <div class="flex items-center justify-between" id="delta-comm">
+                    <span>Communication</span>
+                    <span class="text-text-muted">--</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- VIEW 5: CANDIDATES TABLE -->
+      <section id="view-candidates" class="hidden space-y-5">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-2 gap-4">
+          <div>
+            <h2 class="text-xl font-bold tracking-tight text-text-primary">Candidates</h2>
+            <p class="text-xs text-text-secondary mt-0.5">Master directory of evaluated technical candidates</p>
+          </div>
+          <button onclick="switchView('assessments')" class="px-3.5 py-1.5 rounded-md bg-vetta-orange hover:bg-vetta-hover text-black font-semibold text-xs tracking-wide transition shadow-sm">
+            + New Assessment
+          </button>
+        </div>
+
+        <div class="bg-surface-primary border border-border-subtle rounded-lg p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center space-x-2.5">
+            <input type="text" id="candidate-filter-search" oninput="filterCandidateTable(this.value)" placeholder="Filter by candidate or role..." class="bg-app border border-border-subtle rounded-md px-3 py-1.5 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-vetta-orange w-64 transition">
+            
+            <select id="candidate-status-filter" onchange="filterCandidateStatus(this.value)" class="bg-app border border-border-subtle rounded-md px-2.5 py-1.5 text-xs text-text-secondary focus:outline-none focus:border-vetta-orange">
+              <option value="ALL">All Statuses</option>
+              <option value="COMPLETED">Completed</option>
+              <option value="PENDING">Pending</option>
+              <option value="PROCESSING">Processing</option>
+            </select>
+          </div>
+
+          <span class="text-xs font-mono text-text-muted" id="candidates-count-label">0 candidates recorded</span>
+        </div>
+
+        <div class="bg-surface-primary border border-border-subtle rounded-lg overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="border-b border-border-subtle text-text-muted text-[10px] uppercase font-mono bg-surface-secondary/40">
+                <tr>
+                  <th class="py-2.5 px-3">Candidate</th>
+                  <th class="py-2.5 px-3">Target Role</th>
+                  <th class="py-2.5 px-3 text-center">Overall</th>
+                  <th class="py-2.5 px-3 text-center">Technical</th>
+                  <th class="py-2.5 px-3 text-center">Communication</th>
+                  <th class="py-2.5 px-3">Status</th>
+                  <th class="py-2.5 px-3">Evaluated</th>
+                  <th class="py-2.5 px-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="candidates-table-body" class="divide-y border-border-subtle text-text-secondary font-mono">
+              </tbody>
+            </table>
+          </div>
+
+          <div id="candidates-empty-state" class="py-16 text-center space-y-3 hidden">
+            <div class="h-10 w-10 mx-auto rounded-md bg-surface-secondary border border-border-subtle flex items-center justify-center text-text-muted">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <div class="space-y-1">
+              <h4 class="text-xs font-semibold text-text-primary">No candidates have been evaluated yet</h4>
+              <p class="text-[11px] text-text-muted max-w-sm mx-auto">Assessments will appear in this directory as they are submitted and processed.</p>
+            </div>
+            <button onclick="switchView('assessments')" class="px-3 py-1.5 rounded-md bg-surface-secondary hover:bg-surface-hover text-vetta-orange border border-border-subtle text-xs font-medium transition">
+              + Start Assessment
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- VIEW 6: PIPELINE (KANBAN) -->
+      <section id="view-pipeline" class="hidden space-y-5">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-2 gap-4">
+          <div>
+            <h2 class="text-xl font-bold tracking-tight text-text-primary">Hiring Pipeline</h2>
+            <p class="text-xs text-text-secondary mt-0.5">Automated progression calibrated to multi-agent scoring thresholds</p>
+          </div>
+          <button onclick="switchView('assessments')" class="px-3.5 py-1.5 rounded-md bg-vetta-orange hover:bg-vetta-hover text-black font-semibold text-xs tracking-wide transition shadow-sm">
+            + New Assessment
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-3.5 space-y-3 flex flex-col justify-between min-h-[420px]">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between border-b border-border-subtle pb-2">
+                <span class="text-xs font-semibold text-text-primary">New</span>
+                <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-surface-secondary text-text-muted border border-border-subtle" id="count-col-new">0</span>
+              </div>
+              <div id="cards-col-new" class="space-y-2.5">
+              </div>
+              <div id="empty-col-new" class="py-12 text-center text-[11px] text-text-muted font-mono">
+                No new candidates
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-3.5 space-y-3 flex flex-col justify-between min-h-[420px]">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between border-b border-border-subtle pb-2">
+                <span class="text-xs font-semibold text-vetta-orange">Evaluating</span>
+                <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-vetta-orange/10 text-vetta-orange border border-vetta-orange/20" id="count-col-eval">0</span>
+              </div>
+              <div id="cards-col-eval" class="space-y-2.5">
+              </div>
+              <div id="empty-col-eval" class="py-12 text-center text-[11px] text-text-muted font-mono">
+                No active evaluations
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-3.5 space-y-3 flex flex-col justify-between min-h-[420px]">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between border-b border-border-subtle pb-2">
+                <span class="text-xs font-semibold text-semantic-success">Strong Hire (&ge;7.5)</span>
+                <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-semantic-success/10 text-semantic-success border border-semantic-success/20" id="count-col-hire">0</span>
+              </div>
+              <div id="cards-col-hire" class="space-y-2.5">
+              </div>
+              <div id="empty-col-hire" class="py-12 text-center text-[11px] text-text-muted font-mono">
+                No strong hires yet
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-3.5 space-y-3 flex flex-col justify-between min-h-[420px]">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between border-b border-border-subtle pb-2">
+                <span class="text-xs font-semibold text-semantic-warning">Review Needed (&lt;7.5)</span>
+                <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-semantic-warning/10 text-semantic-warning border border-semantic-warning/20" id="count-col-review">0</span>
+              </div>
+              <div id="cards-col-review" class="space-y-2.5">
+              </div>
+              <div id="empty-col-review" class="py-12 text-center text-[11px] text-text-muted font-mono">
+                No reviews pending
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- VIEW 7: COMPETENCIES (RADAR) -->
+      <section id="view-competencies" class="hidden space-y-6 max-w-4xl">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-2 gap-4">
+          <div>
+            <h2 class="text-xl font-bold tracking-tight text-text-primary">Competency Vectors</h2>
+            <p class="text-xs text-text-secondary mt-0.5">Holistic candidate calibration across five evaluation vectors</p>
+          </div>
+
+          <select id="radar-candidate-select" onchange="onRadarSelectCandidate(this.value)" class="bg-surface-primary border border-border-subtle rounded-md px-3 py-1.5 text-xs text-text-primary focus:outline-none focus:border-vetta-orange font-mono">
+            <option value="">Select an evaluated candidate...</option>
+          </select>
+        </div>
+
+        <div id="competencies-card" class="bg-surface-primary border border-border-subtle rounded-lg p-6 space-y-6">
+          
+          <div id="competencies-empty-state" class="py-16 text-center space-y-2">
+            <svg class="w-8 h-8 text-text-muted mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m12 2 3 7-7 3 7 3-3 7"/></svg>
+            <h4 class="text-xs font-semibold text-text-primary">No candidate selected</h4>
+            <p class="text-[11px] text-text-muted max-w-xs mx-auto">Select an evaluated candidate from the dropdown above to render their 5-axis competency vector.</p>
+          </div>
+
+          <div id="competencies-data-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            
+            <div class="relative aspect-square flex items-center justify-center p-4">
+              <svg class="w-full h-full" viewBox="0 0 300 300">
+                <polygon points="150,20 274,110 226,260 74,260 26,110" fill="none" stroke="#252527" stroke-width="1" />
+                <polygon points="150,55 243,122 207,237 93,237 57,122" fill="none" stroke="#252527" stroke-width="1" />
+                <polygon points="150,90 212,135 188,215 112,215 88,135" fill="none" stroke="#252527" stroke-width="1" />
+                <polygon points="150,125 181,147 169,192 131,192 119,147" fill="none" stroke="#252527" stroke-width="1" />
+
+                <line x1="150" y1="150" x2="150" y2="20" stroke="#252527" stroke-width="1" />
+                <line x1="150" y1="150" x2="274" y2="110" stroke="#252527" stroke-width="1" />
+                <line x1="150" y1="150" x2="226" y2="260" stroke="#252527" stroke-width="1" />
+                <line x1="150" y1="150" x2="74" y2="260" stroke="#252527" stroke-width="1" />
+                <line x1="150" y1="150" x2="26" y2="110" stroke="#252527" stroke-width="1" />
+
+                <polygon points="150,53 243,120 207,233 93,233 57,120" fill="rgba(255,255,255,0.02)" stroke="#77777F" stroke-width="1" stroke-dasharray="3" />
+
+                <polygon id="comp-radar-poly" points="150,30 260,115 215,245 85,245 40,115" fill="rgba(255, 90, 31, 0.15)" stroke="#FF5A1F" stroke-width="2" class="transition-all duration-300" />
+                <circle id="comp-pt-1" cx="150" cy="30" r="3.5" fill="#FF5A1F" />
+                <circle id="comp-pt-2" cx="260" cy="115" r="3.5" fill="#FF5A1F" />
+                <circle id="comp-pt-3" cx="215" cy="245" r="3.5" fill="#FF5A1F" />
+                <circle id="comp-pt-4" cx="85" cy="245" r="3.5" fill="#FF5A1F" />
+                <circle id="comp-pt-5" cx="40" cy="115" r="3.5" fill="#FF5A1F" />
+              </svg>
+            </div>
+
+            <div class="space-y-4">
+              <div>
+                <h4 class="text-xs font-semibold text-text-primary" id="comp-candidate-name">Candidate Name</h4>
+                <p class="text-[11px] text-text-muted font-mono" id="comp-candidate-role">Target Role</p>
+              </div>
+
+              <div class="space-y-2.5 text-xs font-mono">
+                <div class="p-2.5 rounded bg-surface-secondary border border-border-subtle flex items-center justify-between">
+                  <span class="text-text-secondary">Architecture & Systems</span>
+                  <span class="font-bold text-vetta-orange" id="comp-score-arch">0.0</span>
+                </div>
+                <div class="p-2.5 rounded bg-surface-secondary border border-border-subtle flex items-center justify-between">
+                  <span class="text-text-secondary">Code Quality & Syntax</span>
+                  <span class="font-bold text-vetta-orange" id="comp-score-code">0.0</span>
+                </div>
+                <div class="p-2.5 rounded bg-surface-secondary border border-border-subtle flex items-center justify-between">
+                  <span class="text-text-secondary">Communication & Clarity</span>
+                  <span class="font-bold text-semantic-success" id="comp-score-comm">0.0</span>
+                </div>
+                <div class="p-2.5 rounded bg-surface-secondary border border-border-subtle flex items-center justify-between">
+                  <span class="text-text-secondary">Problem Solving</span>
+                  <span class="font-bold text-text-primary" id="comp-score-prob">0.0</span>
+                </div>
+                <div class="p-2.5 rounded bg-surface-secondary border border-border-subtle flex items-center justify-between">
+                  <span class="text-text-secondary">Resilience & Ownership</span>
+                  <span class="font-bold text-text-primary" id="comp-score-own">0.0</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- VIEW 8: ANALYTICS -->
+      <section id="view-analytics" class="hidden space-y-6 max-w-4xl">
+        <div class="pb-2">
+          <h2 class="text-xl font-bold tracking-tight text-text-primary">Analytics & Intelligence</h2>
+          <p class="text-xs text-text-secondary mt-0.5">Aggregate hiring performance and assessment benchmarks</p>
+        </div>
+
+        <div id="analytics-empty-state" class="py-16 text-center space-y-2 bg-surface-primary border border-border-subtle rounded-lg p-6">
+          <svg class="w-8 h-8 text-text-muted mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          <h4 class="text-xs font-semibold text-text-primary">Analytics will appear as your assessment history grows</h4>
+          <p class="text-[11px] text-text-muted max-w-sm mx-auto">Calibrated cohort distributions, pass/fail ratios, and turnaround metrics will display here automatically.</p>
+        </div>
+
+        <div id="analytics-data-container" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-4 space-y-1">
+            <span class="text-xs text-text-muted">Mean Technical Score</span>
+            <div class="text-2xl font-bold font-mono text-vetta-orange" id="analytics-mean-tech">-</div>
+            <p class="text-[10px] text-text-muted font-mono">0-10 scale</p>
+          </div>
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-4 space-y-1">
+            <span class="text-xs text-text-muted">Mean Communication</span>
+            <div class="text-2xl font-bold font-mono text-semantic-success" id="analytics-mean-comm">-</div>
+            <p class="text-[10px] text-text-muted font-mono">0-10 scale</p>
+          </div>
+          <div class="bg-surface-primary border border-border-subtle rounded-lg p-4 space-y-1">
+            <span class="text-xs text-text-muted">Strong Hire Ratio</span>
+            <div class="text-2xl font-bold font-mono text-text-primary" id="analytics-hire-ratio">-</div>
+            <p class="text-[10px] text-text-muted font-mono">&ge; 7.5 composite</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 9: AUDIT LOG -->
+      <section id="view-audit" class="hidden space-y-5 max-w-5xl">
+        <div class="pb-2">
+          <h2 class="text-xl font-bold tracking-tight text-text-primary">Audit Log</h2>
+          <p class="text-xs text-text-secondary mt-0.5">Chronological system events and multi-agent audit trails</p>
+        </div>
+
+        <div class="bg-surface-primary border border-border-subtle rounded-lg overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="border-b border-border-subtle text-text-muted text-[10px] uppercase font-mono bg-surface-secondary/40">
+                <tr>
+                  <th class="py-2.5 px-3">Timestamp</th>
+                  <th class="py-2.5 px-3">Event</th>
+                  <th class="py-2.5 px-3">Actor</th>
+                  <th class="py-2.5 px-3">Candidate / Context</th>
+                  <th class="py-2.5 px-3">Status</th>
+                </tr>
+              </thead>
+              <tbody id="audit-table-body" class="divide-y border-border-subtle text-text-secondary font-mono">
+              </tbody>
+            </table>
+          </div>
+
+          <div id="audit-empty-state" class="py-16 text-center space-y-2 hidden">
+            <svg class="w-8 h-8 text-text-muted mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+            <h4 class="text-xs font-semibold text-text-primary">No audit events logged yet</h4>
+            <p class="text-[11px] text-text-muted max-w-sm mx-auto">Events are automatically captured when assessments are created, uploaded to S3, or evaluated.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 10: SETTINGS -->
+      <section id="view-settings" class="hidden space-y-6 max-w-3xl">
+        <div class="pb-2">
+          <h2 class="text-xl font-bold tracking-tight text-text-primary">Workspace Settings</h2>
+          <p class="text-xs text-text-secondary mt-0.5">Calibrate evaluation parameters and system integrations</p>
+        </div>
+
+        <!-- AI Evaluation & API Key Diagnostics -->
+        <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-border-subtle pb-2">
+            <h3 class="text-xs font-semibold text-text-primary">AI Evaluation Core &amp; API Key</h3>
+            <span class="text-[10px] font-mono text-vetta-orange">Live Diagnostics</span>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div>
+              <label class="block text-text-secondary font-medium mb-1">Dual-Agent AI Model</label>
+              <input type="text" id="settings-llm-model" value="gemini-2.5-flash" disabled class="w-full bg-surface-secondary border border-border-subtle rounded-md px-3 py-1.5 text-xs text-text-muted font-mono cursor-not-allowed">
+            </div>
+            <div>
+              <label class="block text-text-secondary font-medium mb-1">Active AI Evaluation Mode</label>
+              <div id="settings-api-key-badge" class="px-3 py-1.5 rounded-md bg-surface-secondary border border-border-subtle font-mono text-xs flex items-center justify-between">
+                <span id="settings-llm-mode-text" class="truncate text-text-secondary">Checking key status...</span>
+                <span id="settings-llm-mode-indicator" class="h-2 w-2 rounded-full bg-semantic-warning flex-shrink-0 ml-2"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-md bg-surface-secondary border border-border-subtle space-y-2 text-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span class="font-semibold text-text-primary block">Google Gemini API Key Live Probe</span>
+                <span class="text-[10px] text-text-muted font-mono block">Tests live communication with Google Gemini Generative API</span>
+              </div>
+              <button type="button" onclick="checkLLMDiagnostics()" class="px-3.5 py-1.5 rounded-md bg-vetta-orange hover:bg-vetta-hover text-black font-semibold text-xs tracking-wide transition flex-shrink-0">
+                Test API Key Connection
+              </button>
+            </div>
+            <div id="settings-llm-diagnostic-result" class="p-2 rounded bg-surface-primary border border-border-subtle text-[11px] font-mono text-text-muted leading-relaxed">
+              Click above to run live diagnostic against Google Gemini endpoint.
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-4">
+          <h3 class="text-xs font-semibold text-text-primary border-b border-border-subtle pb-2">Evaluation Calibration</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div>
+              <label class="block text-text-secondary font-medium mb-1">Strong Hire Cut-off Threshold</label>
+              <input type="number" step="0.1" value="7.5" class="w-full bg-app border border-border-subtle rounded-md px-3 py-1.5 text-xs text-text-primary font-mono focus:outline-none focus:border-vetta-orange">
+              <span class="text-[10px] text-text-muted font-mono mt-0.5 block">Scores &ge; this value trigger Strong Hire</span>
+            </div>
+            <div>
+              <label class="block text-text-secondary font-medium mb-1">Evaluation Fallback</label>
+              <input type="text" value="Deterministic Heuristic Assessor" disabled class="w-full bg-surface-secondary border border-border-subtle rounded-md px-3 py-1.5 text-xs text-text-muted font-mono cursor-not-allowed">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-primary border border-border-subtle rounded-lg p-5 space-y-4">
+          <h3 class="text-xs font-semibold text-text-primary border-b border-border-subtle pb-2">Artifact Storage Vault</h3>
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-text-secondary">Storage Backend</span>
+              <span class="font-mono text-vetta-orange font-semibold">AWS S3 / Local Disk Fallback</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-text-secondary">Presigned Token Lifespan</span>
+              <span class="font-mono text-text-primary">900 seconds (15 min)</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-200 bg-surface-primary border border-border-strong text-text-primary px-4 py-2 rounded-md shadow-lg text-xs font-mono flex items-center space-x-2">
+    <span class="h-1.5 w-1.5 rounded-full bg-vetta-orange"></span>
+    <span id="toast-text">Action completed</span>
+  </div>
+
+  <script>
+    let candidateData = [];
+    let activeDossierItem = null;
+    let isAudioPlaying = false;
+    let audioTimerInterval = null;
+    let audioElapsedSecs = 0;
+    let startupInterval = null;
+    let startupTick = 0;
+    let readinessConfirmed = false;
+
+    const benchmarks = {
+      architect: {
+        name: "Marcus Vance",
+        role: "Lead Cloud Infrastructure Architect",
+        email: "m.vance@enterprise.com",
+        transcript: "Interviewer: How do you design multi-region Kubernetes architectures for resilience?\nCandidate: In our production setup, we deployed multi-cluster Kubernetes on AWS with cross-region replication. We used Terraform for declarative infrastructure as code, Cilium for eBPF-based service mesh and network security, and ArgoCD for GitOps deployment pipelines. For persistent storage, we leveraged AWS S3 for immutable object storage and Aurora PostgreSQL with global databases. When failover occurs, DNS routing via Route 53 with health checks redirects traffic seamlessly.\nInterviewer: How do you manage team alignment during complex migrations?\nCandidate: Specifically, for example, I hold architecture review sessions, write concise ADRs, and mentor senior engineers, which resulted in zero downtime during our global migration."
+      },
+      fullstack: {
+        name: "Elena Rostova",
+        role: "Senior Fullstack Engineer",
+        email: "e.rostova@techco.io",
+        transcript: "Interviewer: Explain your approach to end-to-end performance in high-throughput applications.\nCandidate: I approach system design with a rigorous data model first. In our FastAPI and PostgreSQL services, I implemented Redis read-through caching for high-frequency user profiles, reducing database query load by 78%. On the frontend, I used React with TanStack Query for optimistic updates and virtualized lists for large datasets. I also built comprehensive Pytest and Cypress test suites with CI/CD automation.\nInterviewer: Describe a difficult technical disagreement with your team.\nCandidate: There was a debate regarding GraphQL versus REST APIs. I prepared a benchmark prototype demonstrating that for our mobile clients, REST with sparse fieldsets met our latency budgets with significantly lower caching complexity."
+      },
+      junior: {
+        name: "Alex Thorne",
+        role: "Associate Python Developer",
+        email: "alex.thorne@devacademy.org",
+        transcript: "Interviewer: What is your experience with object-oriented programming and data structures in Python?\nCandidate: I work primarily with Python 3, using dataclasses and typing for clarity. I understand hash tables, lists, and binary search trees. In my personal projects, I created an asynchronous web scraper using aiohttp and BeautifulSoup to index open-source repositories into SQLite. I also wrote unit tests with pytest.\nInterviewer: How do you handle feedback during code reviews?\nCandidate: I appreciate constructive critique. When senior engineers pointed out algorithmic bottlenecks in my nested loops, I researched itertools and list comprehensions to optimize execution time."
+      }
+    };
+
+    /* ==================== 10-SECOND STARTUP ORCHESTRATION ==================== */
+    function initStartupSequence() {
+      const emblem = document.getElementById('startup-emblem');
+      const brand = document.getElementById('startup-brand');
+      const progressBar = document.getElementById('startup-progress-bar');
+      const statusText = document.getElementById('startup-status-text');
+      const percentage = document.getElementById('startup-percentage');
+
+      // 0-2s: Big Free-Floating Emblem fades in with subtle scale
+      setTimeout(() => {
+        emblem.style.opacity = '1';
+        emblem.style.transform = 'scale(1)';
+      }, 200);
+
+      // 2-4s: Bold Brand wordmark & subtitle reveal
+      setTimeout(() => {
+        brand.style.opacity = '1';
+        brand.style.transform = 'translateY(0)';
+      }, 2000);
+
+      startupTick = 0;
+      const totalTicks = 100; // 10 seconds = 100 ticks @ 100ms
+      
+      startupInterval = setInterval(async () => {
+        startupTick++;
+        const pct = Math.min(100, Math.round((startupTick / totalTicks) * 100));
+        progressBar.style.width = pct + '%';
+        percentage.textContent = pct + '%';
+
+        // Stage progress messages
+        if (startupTick < 20) {
+          statusText.textContent = "Initializing VETTA runtime...";
+        } else if (startupTick < 40) {
+          statusText.textContent = "Calibrating dual-agent evaluation pipeline...";
+        } else if (startupTick < 70) {
+          statusText.textContent = "Connecting to storage vaults & database...";
+        } else if (startupTick === 70) {
+          // At 7.0s: trigger real async readiness probe to /health/ready
+          statusText.textContent = "Checking application readiness (/health/ready)...";
+          try {
+            const res = await fetch('/health/ready');
+            if (res.ok) {
+              readinessConfirmed = true;
+              statusText.textContent = "Readiness confirmed. Preparing workspace...";
+            } else {
+              handleStartupFailure(`Readiness check returned HTTP ${res.status}`);
+              return;
+            }
+          } catch (err) {
+            handleStartupFailure(err.message || "Network / Connection error");
+            return;
+          }
+        } else if (startupTick < 90) {
+          if (readinessConfirmed) {
+            statusText.textContent = "Application verified. Loading workspace...";
+          }
+        } else if (startupTick >= 100) {
+          completeStartupSequence();
+        }
+      }, 100);
+    }
+
+    function handleStartupFailure(errorMsg) {
+      clearInterval(startupInterval);
+      document.getElementById('startup-progress-container').classList.add('hidden');
+      const errorCard = document.getElementById('startup-error-card');
+      errorCard.classList.remove('hidden');
+      document.getElementById('startup-diag-error').textContent = "Details: " + errorMsg;
+      document.getElementById('startup-diag-time').textContent = new Date().toISOString();
+    }
+
+    async function retryStartupReadiness() {
+      const errorCard = document.getElementById('startup-error-card');
+      const statusText = document.getElementById('startup-status-text');
+      const progressContainer = document.getElementById('startup-progress-container');
+      
+      errorCard.classList.add('hidden');
+      progressContainer.classList.remove('hidden');
+      statusText.textContent = "Retrying /health/ready probe...";
+
+      try {
+        const res = await fetch('/health/ready');
+        if (res.ok) {
+          readinessConfirmed = true;
+          statusText.textContent = "Readiness verified. Launching workspace...";
+          document.getElementById('startup-progress-bar').style.width = '100%';
+          document.getElementById('startup-percentage').textContent = '100%';
+          setTimeout(() => completeStartupSequence(), 600);
+        } else {
+          handleStartupFailure(`Retry failed: HTTP ${res.status}`);
+        }
+      } catch (err) {
+        handleStartupFailure(err.message || "Retry failed: Host unreachable");
+      }
+    }
+
+    function toggleStartupDiagnostics() {
+      const box = document.getElementById('startup-diagnostics-box');
+      box.classList.toggle('hidden');
+    }
+
+    function completeStartupSequence() {
+      if (startupInterval) clearInterval(startupInterval);
+      const splash = document.getElementById('startup-screen');
+      if (!splash) return;
+      splash.classList.add('opacity-0', 'scale-105', 'pointer-events-none');
+      setTimeout(() => {
+        splash.style.display = 'none';
+      }, 700);
+    }
+
+    function skipStartupSequence() {
+      completeStartupSequence();
+    }
+
+    /* ==================== VIEW SWITCHING & CONTEXT ==================== */
+    function switchView(viewName) {
+      const views = ['overview', 'assessments', 'processing', 'dossier', 'candidates', 'pipeline', 'competencies', 'analytics', 'audit', 'settings'];
+      views.forEach(v => {
+        const el = document.getElementById('view-' + v);
+        if (el) el.classList.add('hidden');
+        const navBtn = document.getElementById('nav-' + v);
+        if (navBtn) {
+          navBtn.className = 'w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-secondary hover:text-text-primary hover:bg-surface-secondary';
+        }
+      });
+
+      const targetEl = document.getElementById('view-' + viewName);
+      if (targetEl) targetEl.classList.remove('hidden');
+
+      const activeNav = document.getElementById('nav-' + viewName);
+      if (activeNav) {
+        activeNav.className = 'w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition text-text-primary bg-surface-primary border border-border-subtle shadow-sm';
+      }
+
+      // Dossier Empty State vs Content Handling
+      if (viewName === 'dossier') {
+        const emptyState = document.getElementById('dossier-empty-state');
+        const content = document.getElementById('dossier-content');
+        if (!activeDossierItem) {
+          if (emptyState) emptyState.classList.remove('hidden');
+          if (content) content.classList.add('hidden');
+        } else {
+          if (emptyState) emptyState.classList.add('hidden');
+          if (content) content.classList.remove('hidden');
+        }
+      }
+
+      const titles = {
+        overview: ["Overview", "Command center & intelligence summary"],
+        assessments: ["Assessment Studio", "Configure candidate assessment and ingestion material"],
+        processing: ["Assessment Processing", "Multi-agent evaluation in progress"],
+        dossier: ["Candidate Dossier", "Flagship candidate intelligence and scorecard report"],
+        candidates: ["Candidates Directory", "Master directory of evaluated candidates"],
+        pipeline: ["Hiring Pipeline", "Kanban progression by score calibration"],
+        competencies: ["Competency Vectors", "5-axis radar chart versus enterprise benchmark"],
+        analytics: ["Analytics & Benchmarks", "Cohort distributions and throughput"],
+        audit: ["Audit Log", "System event ledger and verification trails"],
+        settings: ["Workspace Settings", "Evaluation thresholds, AI model diagnostics and storage configuration"]
+      };
+
+      if (titles[viewName]) {
+        document.getElementById('context-title').textContent = titles[viewName][0];
+        document.getElementById('context-subtitle').textContent = titles[viewName][1];
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      text.textContent = msg;
+      t.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        t.classList.add('translate-y-20', 'opacity-0');
+      }, 2200);
+    }
+
+    function loadBenchmarkPreset(key) {
+      const b = benchmarks[key];
+      if (!b) return;
+      document.getElementById('form-name').value = b.name;
+      document.getElementById('form-role').value = b.role;
+      document.getElementById('form-email').value = b.email;
+      document.getElementById('form-transcript').value = b.transcript;
+      updateTranscriptWordCount(b.transcript);
+      showToast("Loaded " + b.role + " template");
+    }
+
+    function updateTranscriptWordCount(text) {
+      const count = text.trim() ? text.trim().split(/\s+/).length : 0;
+      document.getElementById('word-count-badge').textContent = `${count} words`;
+    }
+
+    function handleFileSelected(input) {
+      const label = document.getElementById('file-selected-name');
+      if (input.files && input.files[0]) {
+        label.textContent = `Attached: ${input.files[0].name} (${(input.files[0].size / 1024).toFixed(1)} KB)`;
+      } else {
+        label.textContent = '';
+      }
+    }
+
+    /* ==================== ASSESSMENT SUBMISSION & POLLING ==================== */
+    async function handleStartAssessment(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-assessment-btn');
+      const text = document.getElementById('submit-btn-text');
+      const spinner = document.getElementById('submit-spinner');
+      
+      btn.disabled = true;
+      text.textContent = "Ingesting...";
+      spinner.classList.remove('hidden');
+
+      const name = document.getElementById('form-name').value.trim();
+      const role = document.getElementById('form-role').value.trim();
+      const email = document.getElementById('form-email').value.trim();
+      const transcript = document.getElementById('form-transcript').value.trim();
+      const fileInput = document.getElementById('form-file');
+
+      let mediaStorageKey = null;
+
+      try {
+        // Direct file upload if attached
+        if (fileInput.files && fileInput.files[0]) {
+          const formData = new FormData();
+          formData.append('file', fileInput.files[0]);
+          const upRes = await fetch('/interviews/upload-file', {
+            method: 'POST',
+            body: formData
+          });
+          if (upRes.ok) {
+            const upData = await upRes.json();
+            mediaStorageKey = upData.storage_key;
+          }
+        }
+
+        const payload = {
+          candidate_name: name,
+          candidate_email: email || null,
+          role_title: role,
+          transcript: transcript,
+          media_storage_key: mediaStorageKey
+        };
+
+        const res = await fetch('/interviews/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          throw new Error(`Server returned ${res.status}`);
+        }
+
+        const data = await res.json();
+        const taskId = data.task_id;
+
+        // Reset form
+        document.getElementById('assessment-intake-form').reset();
+        document.getElementById('file-selected-name').textContent = '';
+        document.getElementById('word-count-badge').textContent = '0 words';
+
+        // Switch to live processing timeline view
+        switchView('processing');
+        document.getElementById('processing-candidate-name').textContent = `VETTA is evaluating ${name}`;
+        document.getElementById('processing-task-id').textContent = `Assessment #${taskId.substring(0, 8)}`;
+
+        startPollingAssessment(taskId, name, role, mediaStorageKey);
+
+      } catch (err) {
+        alert("Failed to submit assessment: " + err.message);
+      } finally {
+        btn.disabled = false;
+        text.textContent = "Start Assessment";
+        spinner.classList.add('hidden');
+      }
+    }
+
+    async function startPollingAssessment(taskId, candidateName, roleTitle, mediaKey) {
+      const timerEl = document.getElementById('processing-timer');
+      let start = Date.now();
+      const interval = setInterval(() => {
+        const sec = ((Date.now() - start) / 1000).toFixed(1);
+        timerEl.textContent = `Elapsed: ${sec}s`;
+      }, 100);
+
+      const maxPolls = 35;
+      for (let i = 0; i < maxPolls; i++) {
+        await new Promise(r => setTimeout(r, 600));
+        try {
+          const res = await fetch(`/interviews/${taskId}`);
+          if (res.ok) {
+            const data = await res.json();
+            
+            // Reflect actual backend worker state
+            const stepTech = document.getElementById('step-tech');
+            const stepSoft = document.getElementById('step-soft');
+            const stepSynth = document.getElementById('step-synth');
+
+            if (data.status === 'PROCESSING') {
+              if (stepTech) {
+                stepTech.className = 'flex items-center space-x-3 text-semantic-success';
+                stepTech.querySelector('span:first-child').textContent = '✓';
+              }
+              if (stepSoft) {
+                stepSoft.className = 'flex items-center space-x-3 text-vetta-orange font-semibold';
+                stepSoft.querySelector('span:first-child').className = 'h-4 w-4 rounded-full bg-vetta-orange/20 border border-vetta-orange flex items-center justify-center text-[10px] animate-pulse';
+                stepSoft.querySelector('span:first-child').textContent = '●';
+              }
+            }
+
+            if (data.status === 'COMPLETED') {
+              clearInterval(interval);
+              if (stepSoft) {
+                stepSoft.className = 'flex items-center space-x-3 text-semantic-success';
+                stepSoft.querySelector('span:first-child').textContent = '✓';
+              }
+              if (stepSynth) {
+                stepSynth.className = 'flex items-center space-x-3 text-semantic-success';
+                stepSynth.querySelector('span:first-child').textContent = '✓';
+              }
+              await refreshApplicationData();
+              openCandidateDossier(data);
+              showToast("Assessment Completed Successfully");
+              return;
+            } else if (data.status === 'FAILED') {
+              clearInterval(interval);
+              await refreshApplicationData();
+              alert(`Assessment evaluation failed: ${data.error_message || 'Processing encountered an error.'}`);
+              switchView('candidates');
+              return;
+            }
+          }
+        } catch (err) {
+          console.warn("Polling error:", err);
+        }
+      }
+      clearInterval(interval);
+      alert("Assessment processing took longer than expected. Please check the Candidates Directory.");
+      switchView('candidates');
+      refreshApplicationData();
+    }
+
+    /* ==================== DATA REFRESH & DASHBOARD SYNCHRONIZATION ==================== */
+    async function refreshApplicationData() {
+      try {
+        const res = await fetch('/interviews/?size=100');
+        if (res.ok) {
+          const data = await res.json();
+          candidateData = data.items || [];
+          renderOverviewMetrics();
+          renderCandidatesTable(candidateData);
+          renderPipelineBoard(candidateData);
+          renderCompetencyDropdown(candidateData);
+          renderAnalytics(candidateData);
+        }
+      } catch (err) {
+        console.error("Data refresh error:", err);
+      }
+      loadAuditLog();
+      checkLLMDiagnostics(true); // silent check for badge
+    }
+
+    function renderOverviewMetrics() {
+      const total = candidateData.length;
+      let hires = 0;
+      let reviews = 0;
+      let evaluating = 0;
+
+      candidateData.forEach(c => {
+        if (c.status === 'PENDING' || c.status === 'PROCESSING') {
+          evaluating++;
+        } else if (c.scorecard) {
+          const avg = (c.scorecard.coding_score + c.scorecard.communication_rating) / 2;
+          if (avg >= 7.5) hires++;
+          else reviews++;
+        }
+      });
+
+      document.getElementById('kpi-total').textContent = total;
+      document.getElementById('kpi-hires').textContent = hires;
+      document.getElementById('kpi-reviews').textContent = reviews;
+      document.getElementById('kpi-evaluating').textContent = evaluating;
+
+      const tbody = document.getElementById('overview-candidates-body');
+      const emptyState = document.getElementById('overview-empty-state');
+      tbody.innerHTML = '';
+
+      if (total === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        candidateData.slice(0, 5).forEach(item => {
+          const tr = createCandidateTableRow(item);
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    function createCandidateTableRow(item) {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-surface-secondary/60 transition cursor-pointer';
+      tr.onclick = () => openCandidateDossier(item);
+
+      const tech = item.scorecard ? item.scorecard.coding_score.toFixed(1) : '-';
+      const comm = item.scorecard ? item.scorecard.communication_rating.toFixed(1) : '-';
+      const overall = item.scorecard ? ((item.scorecard.coding_score + item.scorecard.communication_rating) / 2).toFixed(1) : '-';
+      const updated = item.created_at ? new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now';
+
+      const statusBadge = item.status === 'COMPLETED' 
+        ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-semantic-success/10 text-semantic-success border border-semantic-success/20">COMPLETED</span>'
+        : '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-vetta-orange/10 text-vetta-orange border border-vetta-orange/20">PROCESSING</span>';
+
+      tr.innerHTML = `
+        <td class="py-2.5 px-3 font-semibold text-text-primary font-sans">${item.candidate_name}</td>
+        <td class="py-2.5 px-3 text-text-muted font-sans">${item.role_title}</td>
+        <td class="py-2.5 px-3 text-center font-bold text-text-primary">${overall}</td>
+        <td class="py-2.5 px-3 text-center text-vetta-orange font-semibold">${tech}</td>
+        <td class="py-2.5 px-3 text-center text-semantic-success font-semibold">${comm}</td>
+        <td class="py-2.5 px-3">${statusBadge}</td>
+        <td class="py-2.5 px-3 text-text-muted text-[11px]">${updated}</td>
+        <td class="py-2.5 px-3 text-right">
+          <div class="flex items-center justify-end space-x-2">
+            <button onclick="event.stopPropagation(); openCandidateDossier(${JSON.stringify(item).replace(/"/g, '&quot;')});" class="text-vetta-orange hover:text-vetta-hover text-xs font-sans font-medium">Inspect</button>
+            <button onclick="event.stopPropagation(); deleteCandidate('${item.task_id}');" title="Delete record" class="p-1 hover:text-semantic-danger text-text-muted transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+        </td>
+      `;
+      return tr;
+    }
+
+    function renderCandidatesTable(items) {
+      const tbody = document.getElementById('candidates-table-body');
+      const emptyState = document.getElementById('candidates-empty-state');
+      const label = document.getElementById('candidates-count-label');
+      
+      tbody.innerHTML = '';
+      label.textContent = `${items.length} candidates recorded`;
+
+      if (items.length === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        items.forEach(c => tbody.appendChild(createCandidateTableRow(c)));
+      }
+    }
+
+    function filterCandidateTable(query) {
+      const q = query.toLowerCase();
+      const filtered = candidateData.filter(c => 
+        c.candidate_name.toLowerCase().includes(q) || 
+        c.role_title.toLowerCase().includes(q)
+      );
+      renderCandidatesTable(filtered);
+    }
+
+    function filterCandidateStatus(statusVal) {
+      if (statusVal === 'ALL') {
+        renderCandidatesTable(candidateData);
+      } else {
+        const filtered = candidateData.filter(c => c.status === statusVal);
+        renderCandidatesTable(filtered);
+      }
+    }
+
+    function renderPipelineBoard(items) {
+      const cols = {
+        new: document.getElementById('cards-col-new'),
+        eval: document.getElementById('cards-col-eval'),
+        hire: document.getElementById('cards-col-hire'),
+        review: document.getElementById('cards-col-review')
+      };
+      const counts = {
+        new: document.getElementById('count-col-new'),
+        eval: document.getElementById('count-col-eval'),
+        hire: document.getElementById('count-col-hire'),
+        review: document.getElementById('count-col-review')
+      };
+      const empties = {
+        new: document.getElementById('empty-col-new'),
+        eval: document.getElementById('empty-col-eval'),
+        hire: document.getElementById('empty-col-hire'),
+        review: document.getElementById('empty-col-review')
+      };
+
+      Object.values(cols).forEach(col => col.innerHTML = '');
+      const tallies = { new: 0, eval: 0, hire: 0, review: 0 };
+
+      items.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'bg-surface-secondary hover:bg-surface-hover border border-border-subtle p-3 rounded-md space-y-2 cursor-pointer transition';
+        card.onclick = () => openCandidateDossier(c);
+
+        if (c.status === 'PENDING') {
+          tallies.new++;
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-text-primary font-sans">${c.candidate_name}</span>
+              <span class="text-[9px] font-mono px-1.5 rounded bg-surface-primary text-text-muted">Queued</span>
+            </div>
+            <p class="text-[10px] text-text-muted font-mono">${c.role_title}</p>
+          `;
+          cols.new.appendChild(card);
+        } else if (c.status === 'PROCESSING') {
+          tallies.eval++;
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-text-primary font-sans">${c.candidate_name}</span>
+              <span class="text-[9px] font-mono px-1.5 rounded bg-vetta-orange/10 text-vetta-orange border border-vetta-orange/20 animate-pulse">Active</span>
+            </div>
+            <p class="text-[10px] text-text-muted font-mono">${c.role_title}</p>
+          `;
+          cols.eval.appendChild(card);
+        } else if (c.scorecard) {
+          const avg = (c.scorecard.coding_score + c.scorecard.communication_rating) / 2;
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-text-primary font-sans">${c.candidate_name}</span>
+              <span class="text-[10px] font-mono font-bold px-1.5 rounded ${avg >= 7.5 ? 'bg-semantic-success/15 text-semantic-success' : 'bg-semantic-warning/15 text-semantic-warning'}">${avg.toFixed(1)}/10</span>
+            </div>
+            <p class="text-[10px] text-text-muted font-mono">${c.role_title}</p>
+            <div class="flex items-center justify-between text-[10px] font-mono text-text-muted pt-1 border-t border-border-subtle">
+              <span>Tech: <strong class="text-vetta-orange">${c.scorecard.coding_score.toFixed(1)}</strong></span>
+              <span>Comm: <strong class="text-semantic-success">${c.scorecard.communication_rating.toFixed(1)}</strong></span>
+            </div>
+          `;
+          if (avg >= 7.5) {
+            tallies.hire++;
+            cols.hire.appendChild(card);
+          } else {
+            tallies.review++;
+            cols.review.appendChild(card);
+          }
+        }
+      });
+
+      Object.keys(tallies).forEach(k => {
+        counts[k].textContent = tallies[k];
+        if (tallies[k] > 0) empties[k].classList.add('hidden');
+        else empties[k].classList.remove('hidden');
+      });
+    }
+
+    /* ==================== CANDIDATE DOSSIER RENDERING ==================== */
+    function openCandidateDossier(item) {
+      activeDossierItem = item;
+      switchView('dossier');
+
+      document.getElementById('dossier-empty-state').classList.add('hidden');
+      document.getElementById('dossier-content').classList.remove('hidden');
+
+      document.getElementById('dossier-name').textContent = item.candidate_name;
+      const emailStr = item.candidate_email ? ` • ${item.candidate_email}` : '';
+      const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString() : '';
+      document.getElementById('dossier-meta').textContent = `Role: ${item.role_title}${emailStr} • ID: #${(item.task_id || '').substring(0, 8)} • Ingested: ${dateStr}`;
+      
+      const initials = item.candidate_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      document.getElementById('dossier-avatar').textContent = initials || 'CV';
+
+      // Handle Audio Player: Only show audio controls if recording/media attached
+      const audioActive = document.getElementById('dossier-audio-active');
+      const audioEmpty = document.getElementById('dossier-audio-empty');
+      if (item.media_storage_key) {
+        audioActive.classList.remove('hidden');
+        audioEmpty.classList.add('hidden');
+        initAudioPlayerForDossier(item.media_url);
+      } else {
+        audioActive.classList.add('hidden');
+        audioEmpty.classList.remove('hidden');
+        initAudioPlayerForDossier(null);
+      }
+
+      if (item.scorecard) {
+        const sc = item.scorecard;
+        const avg = sc.overall_score !== undefined && sc.overall_score !== null ? sc.overall_score : ((sc.coding_score + sc.communication_rating) / 2);
+        const rec = sc.recommendation || (avg >= 7.5 ? 'Strong Hire' : (avg >= 5.5 ? 'Leaning Hire' : 'Do Not Hire'));
+
+        document.getElementById('dossier-overall-score').textContent = avg.toFixed(1);
+        
+        const badge = document.getElementById('dossier-recommendation-badge');
+        badge.textContent = `${rec} (${avg.toFixed(1)}/10)`;
+        if (rec === 'Strong Hire') {
+          badge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-semantic-success/15 text-semantic-success border border-semantic-success/30';
+        } else if (rec === 'Leaning Hire') {
+          badge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-semantic-warning/15 text-semantic-warning border border-semantic-warning/30';
+        } else {
+          badge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-semantic-danger/15 text-semantic-danger border border-semantic-danger/30';
+        }
+
+        document.getElementById('dossier-summary-text').textContent = sc.summary || 'Summary compiled.';
+
+        document.getElementById('dossier-tech-score').textContent = `${sc.coding_score.toFixed(1)} / 10`;
+        const radar = sc.radar_scores || {
+          architecture_and_systems: Math.min(10, sc.coding_score + 0.3),
+          code_quality_and_syntax: sc.coding_score,
+          communication_and_clarity: sc.communication_rating,
+          problem_solving_depth: (sc.coding_score * 0.6 + sc.communication_rating * 0.4),
+          ownership_and_resilience: (sc.coding_score * 0.4 + sc.communication_rating * 0.6)
+        };
+
+        const arch = radar.architecture_and_systems;
+        const code = radar.code_quality_and_syntax;
+        const prob = radar.problem_solving_depth;
+        const own = radar.ownership_and_resilience;
+
+        document.getElementById('sub-arch').textContent = arch.toFixed(1);
+        document.getElementById('bar-arch').style.width = (arch * 10) + '%';
+        document.getElementById('sub-code').textContent = code.toFixed(1);
+        document.getElementById('bar-code').style.width = (code * 10) + '%';
+        document.getElementById('sub-prob').textContent = prob.toFixed(1);
+        document.getElementById('bar-prob').style.width = (prob * 10) + '%';
+        document.getElementById('sub-own').textContent = own.toFixed(1);
+        document.getElementById('bar-own').style.width = (own * 10) + '%';
+
+        document.getElementById('dossier-comm-score').textContent = `${sc.communication_rating.toFixed(1)} / 10`;
+        const struct = Math.min(10, sc.communication_rating + 0.3);
+        const clarity = sc.communication_rating;
+        const concise = Math.max(0, sc.communication_rating - 0.2);
+        const collab = own;
+
+        document.getElementById('sub-struct').textContent = struct.toFixed(1);
+        document.getElementById('bar-struct').style.width = (struct * 10) + '%';
+        document.getElementById('sub-clarity').textContent = clarity.toFixed(1);
+        document.getElementById('bar-clarity').style.width = (clarity * 10) + '%';
+        document.getElementById('sub-concise').textContent = concise.toFixed(1);
+        document.getElementById('bar-concise').style.width = (concise * 10) + '%';
+        document.getElementById('sub-collab').textContent = collab.toFixed(1);
+        document.getElementById('bar-collab').style.width = (collab * 10) + '%';
+
+        const gapsContainer = document.getElementById('dossier-gaps-list');
+        gapsContainer.innerHTML = '';
+        const gaps = sc.technical_gaps_identified || [];
+        document.getElementById('dossier-gaps-count').textContent = gaps.length + ' items';
+        if (gaps.length === 0) {
+          gapsContainer.innerHTML = '<p class="text-xs text-text-muted font-mono">No significant technical gaps flagged.</p>';
+        } else {
+          gaps.forEach((g, idx) => {
+            const d = document.createElement('div');
+            d.className = 'p-3 rounded-md bg-surface-secondary border border-border-subtle flex items-start space-x-3';
+            d.innerHTML = `
+              <span class="text-xs font-mono font-bold text-vetta-orange flex-shrink-0">0${idx+1}</span>
+              <div class="space-y-0.5">
+                <span class="text-xs font-semibold text-text-primary block">${g}</span>
+                <span class="text-[10px] text-text-muted font-mono">Probe depth on production tradeoffs</span>
+              </div>
+            `;
+            gapsContainer.appendChild(d);
+          });
+        }
+
+        const qContainer = document.getElementById('dossier-questions-list');
+        qContainer.innerHTML = '';
+        const questions = sc.follow_up_questions_to_ask || [];
+        if (questions.length === 0) {
+          qContainer.innerHTML = '<p class="text-xs text-text-muted font-mono">No customized follow-up questions required.</p>';
+        } else {
+          questions.forEach((q, idx) => {
+            const d = document.createElement('div');
+            d.className = 'p-3 rounded-md bg-surface-secondary border border-border-subtle flex items-start justify-between group gap-3';
+            d.innerHTML = `
+              <div class="flex items-start space-x-2.5">
+                <span class="font-mono text-xs font-bold text-semantic-info flex-shrink-0">Q${idx+1}</span>
+                <p class="text-xs text-text-secondary leading-relaxed">${q}</p>
+              </div>
+              <button onclick="navigator.clipboard.writeText('${q.replace(/'/g, "\\'")}'); showToast('Question copied to clipboard');" class="text-[10px] font-mono text-text-muted hover:text-text-primary px-2 py-1 rounded bg-surface-primary border border-border-subtle flex-shrink-0 transition">
+                Copy
+              </button>
+            `;
+            qContainer.appendChild(d);
+          });
+        }
+
+        document.getElementById('dossier-tech-notes').textContent = sc.technical_notes || 'Technical review logged.';
+        document.getElementById('dossier-comm-notes').textContent = sc.communication_notes || 'Communication review logged.';
+
+        updateDossierRadar(sc.coding_score, sc.communication_rating);
+      }
+    }
+
+    function updateDossierRadar(tech, comm) {
+      const sArch = Math.min(10, Math.max(1, tech + 0.3));
+      const sCode = tech;
+      const sComm = comm;
+      const sProb = (tech * 0.6 + comm * 0.4);
+      const sOwn = (tech * 0.4 + comm * 0.6);
+
+      const scores = [sArch, sCode, sComm, sProb, sOwn];
+      const angles = [-Math.PI/2, -Math.PI/10, (3*Math.PI)/10, (7*Math.PI)/10, (11*Math.PI)/10];
+      const pts = [];
+
+      scores.forEach((s, i) => {
+        const r = (s / 10) * 125;
+        const x = Math.round(150 + r * Math.cos(angles[i]));
+        const y = Math.round(150 + r * Math.sin(angles[i]));
+        pts.push(`${x},${y}`);
+        const pt = document.getElementById('dossier-pt-' + (i + 1));
+        if (pt) { pt.setAttribute('cx', x); pt.setAttribute('cy', y); }
+      });
+
+      const poly = document.getElementById('dossier-radar-poly');
+      if (poly) poly.setAttribute('points', pts.join(' '));
+
+      const deltaArchEl = document.getElementById('delta-arch');
+      const diffArch = (sArch - 7.5).toFixed(1);
+      deltaArchEl.innerHTML = `<span>Architecture</span><span class="${diffArch >= 0 ? 'text-semantic-success' : 'text-semantic-warning'}">${diffArch >= 0 ? '+' + diffArch : diffArch} vs benchmark</span>`;
+
+      const deltaCodeEl = document.getElementById('delta-code');
+      const diffCode = (sCode - 7.5).toFixed(1);
+      deltaCodeEl.innerHTML = `<span>Coding</span><span class="${diffCode >= 0 ? 'text-semantic-success' : 'text-semantic-warning'}">${diffCode >= 0 ? '+' + diffCode : diffCode} vs benchmark</span>`;
+
+      const deltaCommEl = document.getElementById('delta-comm');
+      const diffComm = (sComm - 7.5).toFixed(1);
+      deltaCommEl.innerHTML = `<span>Communication</span><span class="${diffComm >= 0 ? 'text-semantic-success' : 'text-semantic-warning'}">${diffComm >= 0 ? '+' + diffComm : diffComm} vs benchmark</span>`;
+    }
+
+    /* ==================== DELETE CANDIDATE LIFECYCLE ==================== */
+    async function deleteCandidate(taskId) {
+      if (!confirm("Are you sure you want to delete this assessment record?")) return;
+      try {
+        const res = await fetch(`/interviews/${taskId}`, { method: 'DELETE' });
+        if (res.ok || res.status === 204) {
+          showToast("Assessment record deleted");
+          if (activeDossierItem && activeDossierItem.task_id === taskId) {
+            activeDossierItem = null;
+            switchView('candidates');
+          }
+          await refreshApplicationData();
+        } else {
+          showToast("Failed to delete record");
+        }
+      } catch (err) {
+        showToast("Error deleting record");
+      }
+    }
+
+    function deleteCurrentDossier() {
+      if (activeDossierItem && activeDossierItem.task_id) {
+        deleteCandidate(activeDossierItem.task_id);
+      }
+    }
+
+    /* ==================== COMPETENCIES RADAR VIEW ==================== */
+    function renderCompetencyDropdown(items) {
+      const select = document.getElementById('radar-candidate-select');
+      select.innerHTML = '<option value="">Select an evaluated candidate...</option>';
+      const evaluated = items.filter(c => c.scorecard);
+      if (evaluated.length === 0) {
+        select.innerHTML = '<option value="">No evaluated candidates recorded yet</option>';
+        return;
+      }
+      evaluated.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.task_id;
+        opt.textContent = `${c.candidate_name} (${c.role_title})`;
+        select.appendChild(opt);
+      });
+    }
+
+    function onRadarSelectCandidate(taskId) {
+      const emptyState = document.getElementById('competencies-empty-state');
+      const dataContainer = document.getElementById('competencies-data-container');
+
+      if (!taskId) {
+        emptyState.classList.remove('hidden');
+        dataContainer.classList.add('hidden');
+        return;
+      }
+
+      const item = candidateData.find(c => c.task_id === taskId);
+      if (!item || !item.scorecard) return;
+
+      emptyState.classList.add('hidden');
+      dataContainer.classList.remove('hidden');
+
+      document.getElementById('comp-candidate-name').textContent = item.candidate_name;
+      document.getElementById('comp-candidate-role').textContent = item.role_title;
+
+      const sc = item.scorecard;
+      const sArch = Math.min(10, sc.coding_score + 0.3);
+      const sCode = sc.coding_score;
+      const sComm = sc.communication_rating;
+      const sProb = (sc.coding_score * 0.6 + sc.communication_rating * 0.4);
+      const sOwn = (sc.coding_score * 0.4 + sc.communication_rating * 0.6);
+
+      document.getElementById('comp-score-arch').textContent = sArch.toFixed(1);
+      document.getElementById('comp-score-code').textContent = sCode.toFixed(1);
+      document.getElementById('comp-score-comm').textContent = sComm.toFixed(1);
+      document.getElementById('comp-score-prob').textContent = sProb.toFixed(1);
+      document.getElementById('comp-score-own').textContent = sOwn.toFixed(1);
+
+      const scores = [sArch, sCode, sComm, sProb, sOwn];
+      const angles = [-Math.PI/2, -Math.PI/10, (3*Math.PI)/10, (7*Math.PI)/10, (11*Math.PI)/10];
+      const pts = [];
+
+      scores.forEach((s, i) => {
+        const r = (s / 10) * 125;
+        const x = Math.round(150 + r * Math.cos(angles[i]));
+        const y = Math.round(150 + r * Math.sin(angles[i]));
+        pts.push(`${x},${y}`);
+        const pt = document.getElementById('comp-pt-' + (i + 1));
+        if (pt) { pt.setAttribute('cx', x); pt.setAttribute('cy', y); }
+      });
+
+      const poly = document.getElementById('comp-radar-poly');
+      if (poly) poly.setAttribute('points', pts.join(' '));
+    }
+
+    /* ==================== ANALYTICS & VELOCITY ==================== */
+    function renderAnalytics(items) {
+      const emptyState = document.getElementById('analytics-empty-state');
+      const dataContainer = document.getElementById('analytics-data-container');
+      const completed = items.filter(c => c.scorecard);
+
+      if (completed.length === 0) {
+        emptyState.classList.remove('hidden');
+        dataContainer.classList.add('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      dataContainer.classList.remove('hidden');
+
+      let sumTech = 0;
+      let sumComm = 0;
+      let hires = 0;
+
+      completed.forEach(c => {
+        sumTech += c.scorecard.coding_score;
+        sumComm += c.scorecard.communication_rating;
+        const avg = (c.scorecard.coding_score + c.scorecard.communication_rating) / 2;
+        if (avg >= 7.5) hires++;
+      });
+
+      const meanTech = (sumTech / completed.length).toFixed(1);
+      const meanComm = (sumComm / completed.length).toFixed(1);
+      const ratio = Math.round((hires / completed.length) * 100);
+
+      document.getElementById('analytics-mean-tech').textContent = `${meanTech} / 10`;
+      document.getElementById('analytics-mean-comm').textContent = `${meanComm} / 10`;
+      document.getElementById('analytics-hire-ratio').textContent = `${ratio}%`;
+    }
+
+    /* ==================== REAL AUDIO PLAYER (ZERO FAKE DATA) ==================== */
+    let globalAudioPlayer = null;
+
+    function initAudioPlayerForDossier(mediaUrl) {
+      if (globalAudioPlayer) {
+        globalAudioPlayer.pause();
+        globalAudioPlayer = null;
+      }
+      isAudioPlaying = false;
+      const playIcon = document.getElementById('audio-play-icon');
+      const pauseIcon = document.getElementById('audio-pause-icon');
+      if (playIcon) playIcon.classList.remove('hidden');
+      if (pauseIcon) pauseIcon.classList.add('hidden');
+
+      const timer = document.getElementById('dossier-audio-timer');
+      const progressBar = document.getElementById('dossier-audio-progress');
+      if (timer) timer.textContent = '00:00 / --:--';
+      if (progressBar) progressBar.style.width = '0%';
+
+      if (!mediaUrl) return;
+
+      try {
+        globalAudioPlayer = new Audio(mediaUrl);
+        globalAudioPlayer.addEventListener('loadedmetadata', () => {
+          const d = globalAudioPlayer.duration;
+          if (isNaN(d) || !isFinite(d)) return;
+          const dm = Math.floor(d / 60).toString().padStart(2, '0');
+          const ds = Math.floor(d % 60).toString().padStart(2, '0');
+          if (timer) timer.textContent = `00:00 / ${dm}:${ds}`;
+        });
+
+        globalAudioPlayer.addEventListener('timeupdate', () => {
+          if (!globalAudioPlayer) return;
+          const cur = globalAudioPlayer.currentTime;
+          const dur = globalAudioPlayer.duration || 0;
+          const cm = Math.floor(cur / 60).toString().padStart(2, '0');
+          const cs = Math.floor(cur % 60).toString().padStart(2, '0');
+          const dm = isFinite(dur) ? Math.floor(dur / 60).toString().padStart(2, '0') : '--';
+          const ds = isFinite(dur) ? Math.floor(dur % 60).toString().padStart(2, '0') : '--';
+          if (timer) timer.textContent = `${cm}:${cs} / ${dm}:${ds}`;
+          if (progressBar && dur > 0) {
+            progressBar.style.width = `${Math.min(100, (cur / dur) * 100)}%`;
+          }
+        });
+
+        globalAudioPlayer.addEventListener('ended', () => {
+          isAudioPlaying = false;
+          if (playIcon) playIcon.classList.remove('hidden');
+          if (pauseIcon) pauseIcon.classList.add('hidden');
+          if (progressBar) progressBar.style.width = '0%';
+        });
+
+        globalAudioPlayer.addEventListener('error', () => {
+          if (timer) timer.textContent = 'Artifact unavailable';
+          isAudioPlaying = false;
+          if (playIcon) playIcon.classList.remove('hidden');
+          if (pauseIcon) pauseIcon.classList.add('hidden');
+        });
+      } catch (err) {
+        console.warn("Failed to initialize audio:", err);
+      }
+    }
+
+    function toggleAudio() {
+      if (!globalAudioPlayer) {
+        showToast("No active audio artifact");
+        return;
+      }
+      const playIcon = document.getElementById('audio-play-icon');
+      const pauseIcon = document.getElementById('audio-pause-icon');
+
+      if (globalAudioPlayer.paused) {
+        globalAudioPlayer.play().then(() => {
+          isAudioPlaying = true;
+          if (playIcon) playIcon.classList.add('hidden');
+          if (pauseIcon) pauseIcon.classList.remove('hidden');
+          showToast("Audio playback active");
+        }).catch(err => {
+          console.warn("Audio play error:", err);
+          showToast("Audio format not supported by browser");
+        });
+      } else {
+        globalAudioPlayer.pause();
+        isAudioPlaying = false;
+        if (playIcon) playIcon.classList.remove('hidden');
+        if (pauseIcon) pauseIcon.classList.add('hidden');
+        showToast("Audio paused");
+      }
+    }
+
+    /* ==================== AUDIT LOG INGESTION ==================== */
+    async function loadAuditLog() {
+      try {
+        const res = await fetch('/interviews/audit-log');
+        if (res.ok) {
+          const data = await res.json();
+          renderAuditTable(data.events || []);
+        }
+      } catch (err) {
+        console.warn("Audit log fetch error:", err);
+      }
+    }
+
+    function renderAuditTable(events) {
+      const tbody = document.getElementById('audit-table-body');
+      const emptyState = document.getElementById('audit-empty-state');
+      tbody.innerHTML = '';
+
+      if (events.length === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        events.forEach(ev => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-surface-secondary/40 transition';
+          const time = ev.timestamp ? new Date(ev.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'}) : 'Just now';
+          
+          tr.innerHTML = `
+            <td class="py-2.5 px-3 text-text-muted text-[11px]">${time}</td>
+            <td class="py-2.5 px-3 font-semibold text-text-primary">${ev.event}</td>
+            <td class="py-2.5 px-3 text-text-secondary">${ev.actor}</td>
+            <td class="py-2.5 px-3 text-text-muted">${ev.candidate || '-'} (${ev.role || '-'})</td>
+            <td class="py-2.5 px-3">
+              <span class="px-1.5 py-0.2 rounded text-[10px] ${ev.status === 'COMPLETED' ? 'bg-semantic-success/15 text-semantic-success' : 'bg-surface-secondary text-text-muted'}">${ev.status}</span>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    /* ==================== LLM API KEY DIAGNOSTICS ==================== */
+    async function checkLLMDiagnostics(silent = false) {
+      const resultEl = document.getElementById('settings-llm-diagnostic-result');
+      const modeText = document.getElementById('settings-llm-mode-text');
+      const indicator = document.getElementById('settings-llm-mode-indicator');
+      if (!silent && resultEl) resultEl.textContent = "Connecting to /health/llm diagnostic probe...";
+
+      try {
+        const res = await fetch('/health/llm');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.api_key_configured && data.status === 'connected') {
+            if (modeText) modeText.textContent = `Google Gemini (${data.model})`;
+            if (indicator) indicator.className = 'h-2 w-2 rounded-full bg-semantic-success flex-shrink-0 ml-2';
+            if (resultEl) resultEl.innerHTML = `<span class="text-semantic-success font-semibold">✓ API Key is working!</span> Response: "${data.sample_response || 'OK'}"`;
+            if (!silent) showToast("Gemini API Key Verified & Working!");
+          } else if (data.api_key_configured && data.status === 'error') {
+            if (modeText) modeText.textContent = `Gemini (Key Error: ${data.http_status})`;
+            if (indicator) indicator.className = 'h-2 w-2 rounded-full bg-semantic-danger flex-shrink-0 ml-2';
+            if (resultEl) resultEl.innerHTML = `<span class="text-semantic-danger font-semibold">✗ API Key Error (${data.http_status}):</span> ${data.message}`;
+            if (!silent) showToast("Gemini API Key rejected by Google");
+          } else {
+            if (modeText) modeText.textContent = "Deterministic Heuristic Engine";
+            if (indicator) indicator.className = 'h-2 w-2 rounded-full bg-semantic-info flex-shrink-0 ml-2';
+            if (resultEl) resultEl.innerHTML = `<span class="text-text-secondary font-semibold">ℹ No API Key in environment.</span> VETTA is operating in offline heuristic mode. To enable live Gemini evaluations, supply <code class="text-vetta-orange">GOOGLE_API_KEY</code> in <code class="text-text-secondary">.env</code>.`;
+          }
+        }
+      } catch (err) {
+        if (!silent && resultEl) resultEl.textContent = "Diagnostic request failed: " + err.message;
+      }
+    }
+
+    function copyDossierJSON() {
+      if (activeDossierItem) {
+        const jsonStr = JSON.stringify(activeDossierItem, null, 2);
+        try {
+          navigator.clipboard.writeText(jsonStr);
+        } catch (e) {}
+
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const safeName = (activeDossierItem.candidate_name || 'candidate').toLowerCase().replace(/\s+/g, '-');
+        const idShort = (activeDossierItem.task_id || '').substring(0, 8);
+        a.download = `vetta-dossier-${safeName}-${idShort}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast("Dossier JSON exported and copied to clipboard");
+      }
+    }
+
+    function handleGlobalSearch(val) {
+      if (!val.trim()) return;
+      filterCandidateTable(val);
+      if (document.getElementById('view-candidates').classList.contains('hidden')) {
+        switchView('candidates');
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        const search = document.getElementById('global-search');
+        if (search) search.focus();
+      }
+      if (e.key === 'Escape') {
+        skipStartupSequence();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initStartupSequence();
+      refreshApplicationData();
+    });
+  </script>
+</body>
+</html>

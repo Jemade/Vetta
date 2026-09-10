@@ -1,10 +1,14 @@
 # VETTA — Autonomous Interview Assessment & Intelligence Platform
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com)
 [![SQLAlchemy 2.0](https://img.shields.io/badge/SQLAlchemy-2.0_Async-red.svg)](https://docs.sqlalchemy.org/)
-[![Docker Ready](https://img.shields.io/badge/Docker-Compose_&_K8s-2496ED.svg)](https://www.docker.com/)
+[![Render Live](https://img.shields.io/badge/Render-Deployed_Live-46E3B7.svg)](https://vetta-9xaz.onrender.com)
+[![Docker Ready](https://img.shields.io/badge/Docker-Multi--stage-2496ED.svg)](https://www.docker.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Live Production Web Console**: [https://vetta-9xaz.onrender.com](https://vetta-9xaz.onrender.com)  
+**Live Swagger API Reference**: [https://vetta-9xaz.onrender.com/docs](https://vetta-9xaz.onrender.com/docs)
 
 **VETTA** is an autonomous interview intelligence and assessment platform engineered for technical recruiters, engineering managers, and talent operations teams. It eliminates manual, subjective interview reviews by ingesting dialogue transcripts, technical artifacts, and audio recordings, evaluating candidates through an asynchronous dual-agent cognitive pipeline, and synthesizing rigorous, calibrated scorecards against enterprise benchmarks.
 

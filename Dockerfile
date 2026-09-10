@@ -42,16 +42,18 @@ RUN pip install --no-cache-dir /wheels/* && rm -rf /wheels
 
 # Copy application source code
 COPY --chown=appuser:appgroup app /app/app
-COPY --chown=appuser:appgroup pyproject.toml README.md /app/
+COPY --chown=appuser:appgroup main.py pyproject.toml README.md /app/
 
-# Create local storage directory with permissions
-RUN mkdir -p /app/storage_uploads && chown -R appuser:appgroup /app/storage_uploads
+# Create local storage directory with permissions and ensure appuser owns /app
+RUN mkdir -p /app/storage_uploads && \
+    chown -R appuser:appgroup /app && \
+    chmod -R 775 /app
 
 USER appuser
 
 EXPOSE 8000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
 
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

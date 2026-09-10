@@ -11,7 +11,7 @@ services:
       - key: ENVIRONMENT
         value: production
       - key: PYTHON_VERSION
-        value: 3.11.9
+        value: "3.12"
       - key: LOG_LEVEL
         value: INFO
       - key: RATE_LIMIT_PER_MINUTE

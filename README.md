@@ -55,3 +55,9 @@ pytest -q tests
 ## Current scope
 
 Scorecards are review aids. Heuristic and model-generated scores are not validated hiring predictions. The default in-process task mode is intended for local development; durable distributed processing requires the Celery configuration.
+
+## Engineering and contribution guide
+
+Read the [engineering notes](docs/ENGINEERING.md) for implementation boundaries and verification commands, the [review checklist](docs/REVIEW_CHECKLIST.md) for evidence still required, and [CONTRIBUTING.md](CONTRIBUTING.md) to propose changes. Report vulnerabilities through [SECURITY.md](SECURITY.md).
+
+[![Repository hygiene](https://github.com/Jemade/Vetta/actions/workflows/repository-hygiene.yml/badge.svg)](https://github.com/Jemade/Vetta/actions/workflows/repository-hygiene.yml)
